@@ -1,0 +1,103 @@
+* {
+  font-family: 'Roboto'; }
+
+body {
+  background-color: #F5F8FA; }
+
+input {
+  margin-bottom: 0; }
+
+.dark-button {
+  background-color: #0B3C5D;
+  border: 1px solid #0B3C5D;
+  color: white; }
+
+.light-button {
+  background-color: #328cc1;
+  border: 1px solid #328cc1;
+  color: white; }
+
+.facebook {
+  background-color: #3B5998; }
+
+.google {
+  background-color: #BD403A; }
+
+.navbar {
+  background-color: #0B3C5D;
+  padding: 20px; }
+  .navbar .wrapper {
+    position: relative; }
+  .navbar .login {
+    display: inline-block;
+    position: absolute;
+    right: 0; }
+  .navbar .logo {
+    width: 250px; }
+  .navbar .forgot-pass {
+    color: white; }
+    .navbar .forgot-pass:hover {
+      cursor: pointer; }
+  .navbar .button-primary {
+    color: #328cc1;
+    background-color: white;
+    border-color: white; }
+
+.article-wrapper {
+  background-color: white;
+  border: 1px solid #e6ecf0;
+  border-radius: 5px;
+  padding: 5px;
+  position: relative;
+  margin-bottom: 15px; }
+  .article-wrapper .article-container {
+    color: black;
+    height: 100%;
+    width: 100%;
+    text-decoration: none; }
+  .article-wrapper .article-imgurl {
+    width: 100%;
+    background-color: black;
+    display: block; }
+  .article-wrapper .article {
+    padding: 5px;
+    display: block;
+    width: 100%; }
+    .article-wrapper .article h6 {
+      font-weight: 600;
+      margin-bottom: 0; }
+    .article-wrapper .article span {
+      color: #999;
+      font-size: 12px; }
+  .article-wrapper .description {
+    font-family: 'Georgia', serif;
+    font-size: 14px;
+    margin-bottom: 0; }
+
+.homepage-body {
+  margin-top: 50px; }
+  .homepage-body .left-container {
+    margin-left: 4%; }
+  .homepage-body .social {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    display: inline-block;
+    border-radius: 5px;
+    text-align: center; }
+    .homepage-body .social:hover {
+      cursor: pointer; }
+  .homepage-body .img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%; }
+  .homepage-body .social-icon {
+    width: 30px; }
+  .homepage-body .signup-form {
+    margin-top: 50px; }
+    .homepage-body .signup-form .row {
+      margin-bottom: 15px; }
+
+/*# sourceMappingURL=index.css.map */
