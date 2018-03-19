@@ -1,23 +1,52 @@
 import React, { Component } from 'react';
-import Request from 'superagent';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect,
+  withRouter
+} from "react-router-dom";
 
+import Request from 'superagent';
+import firebase from '../firebase.js';
 import ArticleCell from './ArticleCell'
 import facebookIcon from '../img/facebook.png';
 import googleIcon from '../img/google-plus.png';
+
+const GoogleButton = withRouter(
+  ({ history }) =>
+    <button className="social google" onClick={() => {
+            history.push("/news");
+          }}>
+      <div className="img-wrapper">
+        <img className="social-icon" src={googleIcon} alt="google"/>
+      </div>
+    </button>
+);
+
+const FacebookButton = withRouter(
+  ({ history }) =>
+    <button className="social facebook" onClick={() => {
+            history.push("/news");
+          }}>
+      <div className="img-wrapper">
+        <img className="social-icon" src={facebookIcon} alt="facebook"/>
+      </div>
+    </button>
+);
 
 class HomePageBody extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      requestFailed: false
+      requestFailed: false,
+      authenticated: false
     }
   }
 
   componentWillMount() {
     const articlesURL =
     "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=10&direction=DESC"
-
-    let currentComponent = this;
 
     Request
       .get(articlesURL)
@@ -28,8 +57,15 @@ class HomePageBody extends Component {
       });
   }
 
+  logInWithGoogle() {
+    alert("redirect");
+    this.props.history.push("/news")
+  }
+
   render() {
-    console.log(this.state.articles)
+    // const { from } = this.props.location.state || '/news'
+    // const { fireRedirect } = this.state
+
     var articles = this.state.articles ? this.state.articles : [];
     var articlesList = articles.map(function(article){
                         return <ArticleCell
@@ -53,38 +89,32 @@ class HomePageBody extends Component {
             </div>
           </div>
           <div>
-          <div className="six columns">
+          <div className="six columns u-pull-right">
             <h4>Create an account</h4>
             <h6>Or sign up with social</h6>
             <div className="social-buttons">
-              <div className="social facebook">
-                <div className="img-wrapper">
-                  <img className="social-icon" src={facebookIcon} />
-                </div>
-              </div>
-              <div className="social google">
-                <div className="img-wrapper">
-                  <img className="social-icon" src={googleIcon} />
-                </div>
-              </div>
+              <FacebookButton />
+              <GoogleButton />
             </div>
             <div className="signup-form">
               <div className="row">
-                <div className="six columns">
-                  <input className="u-full-width" type="text" placeholder="First Name" id="exampleEmailInput" />
-                </div>
-                <div className="six columns">
-                  <input className="u-full-width" type="text" placeholder="Last Name" id="exampleEmailInput" />
+                <div className="twelve columns">
+                  <input className="u-full-width" type="text" placeholder="First Name" />
                 </div>
               </div>
               <div className="row">
                 <div className="twelve columns">
-                  <input className="u-full-width" type="text" placeholder="Email Address" id="exampleEmailInput"/>
+                  <input className="u-full-width" type="text" placeholder="Last Name" />
                 </div>
               </div>
               <div className="row">
                 <div className="twelve columns">
-                  <input className="u-full-width" type="password" placeholder="Password" id="exampleEmailInput"/>
+                  <input className="u-full-width" type="text" placeholder="Email Address" />
+                </div>
+              </div>
+              <div className="row">
+                <div className="twelve columns">
+                  <input className="u-full-width" type="password" placeholder="Password" />
                 </div>
               </div>
               <input type="submit" value="Create Account" className="u-pull-right light-button"/>

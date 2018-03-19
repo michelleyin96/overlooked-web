@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import googleIcon from '../img/google-plus.png';
 import moment from 'moment'
 
 class ArticleCell extends Component {
