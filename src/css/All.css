@@ -867,10 +867,10 @@ input {
   border-radius: 5px;
   padding: 5px;
   position: relative;
-  margin-bottom: 15px; }
+  margin-bottom: 30px; }
   .article-wrapper .block {
     display: block;
-    width: 100; }
+    width: 100%; }
   .article-wrapper .article-container {
     width: 100%;
     color: black;

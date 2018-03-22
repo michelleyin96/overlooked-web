@@ -17,6 +17,11 @@ class NewsArticleCell extends Component {
             </div>
           </div>
         </a>
+        <div class="row">
+          <div class="three columns">Like</div>
+          <div class="three columns">Columns</div>
+          <div class="three columns">Share</div>
+        </div>
       </div>
     )
 	}
