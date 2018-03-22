@@ -9,7 +9,7 @@ import {
 
 import Request from 'superagent';
 import firebase from '../firebase.js';
-import ArticleCell from './ArticleCell'
+import ArticleCell from './ArticleCell';
 import facebookIcon from '../img/facebook.png';
 import googleIcon from '../img/google-plus.png';
 
