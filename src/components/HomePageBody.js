@@ -7,7 +7,7 @@ import {
   withRouter
 } from "react-router-dom";
 import Request from 'superagent';
-import firebase from '../firebase';
+import firebase, { auth, googleAuth } from '../firebase';
 
 import ArticleCell from './ArticleCell';
 import facebookIcon from '../img/facebook.png';
@@ -15,34 +15,13 @@ import googleIcon from '../img/google-plus.png';
 
 const HomePageArticles = "home-page-articles";
 
-const GoogleButton = withRouter(
-  ({ history }) =>
-    <button className="social google" onClick={() => {
-            history.push("/news");
-          }}>
-      <div className="img-wrapper">
-        <img className="social-icon" src={googleIcon} alt="google"/>
-      </div>
-    </button>
-);
-
-const FacebookButton = withRouter(
-  ({ history }) =>
-    <button className="social facebook" onClick={() => {
-            history.push("/news");
-          }}>
-      <div className="img-wrapper">
-        <img className="social-icon" src={facebookIcon} alt="facebook"/>
-      </div>
-    </button>
-);
-
 class HomePageBody extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
       requestFailed: false,
-      authenticated: false,
+      authenticatedUser: null,
       fname: '',
       lname: '',
       email: '',
@@ -53,9 +32,21 @@ class HomePageBody extends Component {
     this.lNameChange = this.lNameChange.bind(this);
     this.emailChange = this.emailChange.bind(this);
     this.pwdChange = this.pwdChange.bind(this);
+    this.handleFacebookLogin = this.handleFacebookLogin.bind(this);
+    this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
   }
 
   componentWillMount() {
+    if(this.state.authenticatedUser) {
+      this.props.history.push("/news");
+      return;
+    }
+    const appTokenKey = localStorage.getItem(appTokenKey)
+    if (appTokenKey) {
+        this.props.history.push("/news");
+        return;
+    }
+
     const articlesURL =
     "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=10&direction=DESC"
 
@@ -76,7 +67,26 @@ class HomePageBody extends Component {
   /**
    * Enables Google+ Login
    */
-  logInWithGoogle() {
+  handleGoogleLogin() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth.useDeviceLanguage();
+    firebase.auth().signInWithPopup(provider).then(function(result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      // ...
+    }).catch(function(error) {
+      alert(error.message)
+    });
+
+    this.props.history.push("/news")
+  }
+
+  /**
+   * Enables Facebook Login
+   */
+  handleFacebookLogin() {
     alert("redirect");
     this.props.history.push("/news")
   }
@@ -110,23 +120,41 @@ class HomePageBody extends Component {
   }
 
   /**
+   * Redirect to news page
+   */
+  redirectToHome() {
+    this.props.history.push("/news")
+  }
+
+  /**
    * Creates a new account.
    *
    */
   createAccount() {
-    firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.pwd).catch(function(error) {
-      // Handle Errors here.
-      alert(error.message)
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
+    var email = this.state.email
+    var password = this.state.pwd
+    var name = this.state.fname + " " + this.state.lname
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
+        var user = firebase.auth().currentUser;
+        user.updateProfile({
+          displayName: name,
+        }).then(() => {
+          this.setState({ authenticatedUser: user });
+          localStorage.setItem("authToken", user.uid)
+          this.props.history.push("/news")
+        }).catch(function(error) {
+          alert(error.message)
+        });
+    }, function(error) {
+        alert(error.message)
+        var errorCode = error.code;
+        var errorMessage = error.message;
     });
   }
 
   render() {
-    // const { from } = this.props.location.state || '/news'
-    // const { fireRedirect } = this.state
-
+    const { match, location, history } = this.props
     var articles = this.state.articles ? this.state.articles : [];
     var articlesList = articles.map(function(article){
                         return <ArticleCell
@@ -154,8 +182,16 @@ class HomePageBody extends Component {
             <h4>Create an account</h4>
             <h6>Or sign up with social</h6>
             <div className="social-buttons">
-              <FacebookButton />
-              <GoogleButton />
+              <button className="social facebook" onClick={ this.handleFacebookLogin }>
+                <div className="img-wrapper">
+                  <img className="social-icon" src={facebookIcon} alt="google"/>
+                </div>
+              </button>
+              <button className="social google" onClick={ this.handleGoogleLogin }>
+                <div className="img-wrapper">
+                  <img className="social-icon" src={googleIcon} alt="google"/>
+                </div>
+              </button>
             </div>
             <div className="signup-form">
               <div className="row">
@@ -221,4 +257,4 @@ class HomePageBody extends Component {
   }
 }
 
-export default HomePageBody;
+export default withRouter(HomePageBody);
