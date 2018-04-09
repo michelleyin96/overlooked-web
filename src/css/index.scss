@@ -131,6 +131,15 @@ $light-blue: #328cc1;
     	height: 100%;
     	padding-right: 10px;
     }
+    .right-nav-item {
+    	margin-left: 20px;
+    	cursor: pointer;
+    	-webkit-transition: color .1s ease-in-out;
+    	transition: color .1s ease-in-out;
+    	&:hover {
+    		color: $light-blue;
+    	}
+    }
 }
 
 .articles-preview {

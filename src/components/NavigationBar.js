@@ -38,6 +38,9 @@ class NavigationBar extends Component {
             <img src={overlooked} className="overlooked vertical-center" alt="overlooked"/>
           </div>
           <div className="right-nav u-pull-right vertical-container">
+            <div className="right-nav-item vertical-container-child">Looks</div>
+            <div className="right-nav-item vertical-container-child">Profile</div>
+            <div className="right-nav-item vertical-container-child">Settings</div>
             <div className="right-nav-item vertical-container-child" onClick={ this.logOut }>Log Out</div>
           </div>  
   		  </div>

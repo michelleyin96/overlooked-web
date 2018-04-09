@@ -95,6 +95,13 @@ input {
   .navigation .right-nav {
     height: 100%;
     padding-right: 10px; }
+  .navigation .right-nav-item {
+    margin-left: 20px;
+    cursor: pointer;
+    -webkit-transition: color .1s ease-in-out;
+    transition: color .1s ease-in-out; }
+    .navigation .right-nav-item:hover {
+      color: #328cc1; }
 
 .articles-preview {
   max-height: 100vh;

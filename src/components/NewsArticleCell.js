@@ -12,10 +12,17 @@ class NewsArticleCell extends Component {
     super(props);
     this.state = {
       showComments: false,
+      commentText: '',
+      comments: this.props.comments,
+      commentPosts: [],
     }
 
+    // Bind action handlers
     this.toggleComments = this.toggleComments.bind(this);
     this.likeArticle = this.likeArticle.bind(this);
+    this.shareArticle = this.shareArticle.bind(this);
+    this.postComment = this.postComment.bind(this);
+    this.commentTextAreaChange = this.commentTextAreaChange.bind(this);
   }
 
   /**
@@ -40,24 +47,53 @@ class NewsArticleCell extends Component {
       });
   }
 
+  /**
+   * POST request when user attempts to comment on an article.
+   */
+  postComment(event) {
+    var newComments = this.state.commentPosts;
+    newComments.push(this.state.commentText);
+    this.setState({ commentPosts: newComments });
+    this.setState({ commentText: "" });
+  }
+
+  /**
+   * POST request when user wants to share an article.
+   */
+  shareArticle(event) {
+
+  }
+
+  /**
+   * Update Comment Text Field
+   */
+  commentTextAreaChange(event) {
+    this.setState({ commentText: event.target.value });
+  }
+
+
 	render() {
     const date = moment(this.props.date).format('MMM DD, YYYY');
     const context = this.props.author + " · " + date;
     const numLikes = this.props.likes.length;
     const numShares = this.props.shares.length;
-    var comments = this.props.comments;
+    var comments = this.state.comments;
+    var commentPosts = this.state.commentPosts;
     var commentList = comments.map(function(comment){
                         return <Comment
                                   author={"John Doe"}
                                   body={comment.content}
                                 />;
                       });
+    var commentPostList = commentPosts.map(function(commentText){
+                            return <Comment author={"Your Name"} body={commentText}/>;
+                          });
 
     return (
       <div className="post">
         <div className="article-wrapper">
       		<a href={this.props.url} className="article-container" target="_blank">
-            <div class="row">
+            <div className="row">
               <img src={this.props.img} className="article-imgurl four columns" />
               <div className="article eight columns">
                 <h6>{this.props.title}</h6>
@@ -86,9 +122,19 @@ class NewsArticleCell extends Component {
         </div>
         <div className={"comments-wrapper " + (this.state.showComments ? "show" : "hide")}>
           {commentList}
+          {commentPostList}
           <div className="post-comment">
-            <textarea class="u-full-width" placeholder="Comment…" id="postComment"></textarea>
-            <button className="button light-button u-pull-right">Submit</button>
+            <textarea
+              className="u-full-width"
+              ref={ this.commentInput }
+              placeholder="Comment…"
+              id="commentTextArea"
+              value={ this.state.commentText }
+              onChange={ this.commentTextAreaChange }>
+            </textarea>
+            <button className="button light-button u-pull-right" onClick={ this.postComment }>
+              Submit
+            </button>
           </div>
         </div>
       </div>
