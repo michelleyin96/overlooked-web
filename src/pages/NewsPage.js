@@ -6,6 +6,7 @@ import NewsTopicBar from '../components/NewsTopicBar';
 import NewsArticleCell from '../components/NewsArticleCell';
 import '../css/All.css';
 
+const DEFAULT_ARTICLES = "default-articles";
 
 class NewsPage extends Component {
   constructor(props) {
@@ -13,12 +14,24 @@ class NewsPage extends Component {
     this.state = {
       requestFailed: false,
       authenticated: false,
+      activeTopic: "popular",
     }
   }
 
   componentWillMount() {
+    const cachedArticles = sessionStorage.getItem(DEFAULT_ARTICLES);
+    if (cachedArticles) {
+      return;
+    }
+    var topic = this.state.activeTopic;
+    if ((topic == "popular") ||
+        (topic == "human rights") ||
+        (topic == "universities")) {
+      topic = "all"
+    }
     const articlesURL =
-    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=10&direction=DESC"
+    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articledata?articleID=1&topic="
+    + topic + "&numArticles=%22%22&direction=DESC"
 
     Request
       .get(articlesURL)
@@ -26,11 +39,39 @@ class NewsPage extends Component {
         this.setState({
           articles: response.body.body
         });
+        sessionStorage.setItem(DEFAULT_ARTICLES, JSON.stringify(response.body.body));
+      });
+  }
+
+  _newActiveTopic(topic) {
+    if ((topic == "popular") ||
+        (topic == "human rights") ||
+        (topic == "universities")) {
+      topic = "all"
+    }
+    const articlesURL =
+    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articledata?articleID=1&topic="
+    + topic + "&numArticles=%22%22&direction=DESC"
+
+    Request
+      .get(articlesURL)
+      .then(response => {
+        this.setState({
+          articles: response.body.body,
+          activeTopic: topic,
+        });
       });
   }
 
   render() {
-    var articles = this.state.articles ? this.state.articles : [];
+    var default_articles = [];
+    if (sessionStorage.getItem(DEFAULT_ARTICLES) != null) {
+      default_articles = JSON.parse(sessionStorage.getItem(DEFAULT_ARTICLES));
+    }
+
+    var articles =
+      this.state.articles ? this.state.articles : default_articles;
+
     var articlesList = articles.map(function(article){
                         return <NewsArticleCell
                                 title={article.title}
@@ -39,13 +80,16 @@ class NewsPage extends Component {
                                 description={article.description}
                                 url={article.articleURL}
                                 img={article.imageURL}
+                                comments={article.comments}
+                                likes={article.likes}
+                                shares={article.shares}
                               />;
                       });
 
     return (
     	<div className="news-page">
     		<NavigationBar />
-        <NewsTopicBar />
+        <NewsTopicBar updateTopic={ this._newActiveTopic.bind(this) }/>
       	<div className="container article-container">
       		{articlesList}
       	</div>

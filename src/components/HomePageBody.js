@@ -10,8 +10,10 @@ import Request from 'superagent';
 import firebase, { auth, googleAuth } from '../firebase';
 
 import ArticleCell from './ArticleCell';
+import HomePageHeaderBar from './HomePageHeaderBar';
 import facebookIcon from '../img/facebook.png';
 import googleIcon from '../img/google-plus.png';
+import logo from '../img/Logo-white.png';
 
 const HomePageArticles = "home-page-articles";
 
@@ -48,7 +50,7 @@ class HomePageBody extends Component {
     }
 
     const articlesURL =
-    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=10&direction=DESC"
+    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articledata?articleID=1&topic=all&numArticles=10&direction=DESC"
 
     const cachedArticles = sessionStorage.getItem(HomePageArticles);
     if (cachedArticles) {
@@ -69,7 +71,6 @@ class HomePageBody extends Component {
    */
   handleGoogleLogin() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth.useDeviceLanguage();
     firebase.auth().signInWithPopup(provider).then(function(result) {
       // This gives you a Google Access Token. You can use it to access the Google API.
       var token = result.credential.accessToken;
@@ -168,17 +169,18 @@ class HomePageBody extends Component {
                       });
 
     return (
-      <div className="container homepage-body">
+      <div className="homepage-body">
         <div className="row">
           <div className="six columns left-container">
-            <h2>The social news</h2>
-            <h2> network.</h2>
+            <img className="logo" src={logo} />
+            <h4 className="value-prop">The social news network.</h4>
             <div className="articles-preview">
             {articlesList}
             </div>
           </div>
           <div>
-          <div className="six columns u-pull-right">
+          <div className="six columns right-container u-pull-right">
+            <HomePageHeaderBar />
             <h4>Create an account</h4>
             <h6>Or sign up with social</h6>
             <div className="social-buttons">

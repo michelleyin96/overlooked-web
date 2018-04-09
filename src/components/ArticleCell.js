@@ -7,7 +7,7 @@ class ArticleCell extends Component {
     const context = this.props.author + " · " + date
     return (
       <div>
-        <div className="article-wrapper">
+        <div className="article-wrapper post">
       		<a href={this.props.url} className="article-container">
             <img src={this.props.img} className="article-imgurl block" />
             <div className="article block">

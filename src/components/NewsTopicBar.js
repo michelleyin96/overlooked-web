@@ -10,8 +10,9 @@ class NewsTopicBar extends Component {
   }
 
   _updateActiveTopic(topic) {
-    console.log(topic)
-    this.setState({activeTopic: topic})
+    console.log(topic);
+    this.setState({activeTopic: topic});
+    this.props.updateTopic(topic);
   }
 
 	render() {
@@ -19,7 +20,7 @@ class NewsTopicBar extends Component {
       <div className="container news-topic-bar">
     		<div className="row">
           <NewsTopic topic="popular" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
-          <NewsTopic topic="looks" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
+          <NewsTopic topic="human rights" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="corruption" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="legislation" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="innovation" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>

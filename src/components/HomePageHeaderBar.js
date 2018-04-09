@@ -48,11 +48,9 @@ class HomePageHeaderBar extends Component {
 
 	render() {
     return (
-  		<nav className="navbar navbar-fixed-top">
-  		  <div className="container wrapper">
-  		    <img className="logo" src={logo} />
+  		  <div className="wrapper">
   		    <div className="login">
-  		    	<div className="form-group float-right">
+  		    	<div className="form-group">
   		    		<input
                 id="email"
                 type="text"
@@ -72,7 +70,7 @@ class HomePageHeaderBar extends Component {
                 onChange={this.pwdChange}
               />
   		    		<input
-                className="button-primary login-button"
+                className="button-primary login-button u-pull-right"
                 type="submit"
                 value="Log In"
                 onClick={this.logInUser}
@@ -81,7 +79,6 @@ class HomePageHeaderBar extends Component {
   		    	<a className="u-pull-right forgot-pass">Forgot password?</a>
   		    </div>
   		  </div>
-  		</nav>
     )
 	}
 }
