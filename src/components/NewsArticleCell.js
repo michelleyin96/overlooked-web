@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Request from 'superagent';
 import moment from 'moment'
 import Comment from './Comment';
-import Like from 'react-icons/lib/fa/heart-o';
+import Like from './HeartIcon';
 import Share from 'react-icons/lib/fa/retweet';
 import ShowMore from 'react-icons/lib/fa/angle-down';
  
@@ -15,6 +15,8 @@ class NewsArticleCell extends Component {
       commentText: '',
       comments: this.props.comments,
       commentPosts: [],
+      numLikes: this.props.likes.length,
+      liked: false,
     }
 
     // Bind action handlers
@@ -37,13 +39,18 @@ class NewsArticleCell extends Component {
    * Send POST request to like an article.
    */
   likeArticle(event) {
-    alert("sending")
+    // TODO: Add unlike functionality
     Request.post('https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles/likes')
-      .send({"userID" : "1", "articleID" : "1"})
+      .send({"params" :
+              { "userID" : "5", "articleID" : "1" }
+            })
       .then(response => {
-        console.log("hello")
-        console.log(response)
-        alert("success")
+        if (response.body.status == "Success") {
+          var likes = this.state.numLikes + 1;
+          const likeOption = this.state.liked;
+          this.setState({ numLikes: likes })
+          this.setState({ liked: !likeOption})
+        }
       });
   }
 
@@ -75,13 +82,13 @@ class NewsArticleCell extends Component {
 	render() {
     const date = moment(this.props.date).format('MMM DD, YYYY');
     const context = this.props.author + " · " + date;
-    const numLikes = this.props.likes.length;
+    const numLikes = this.state.numLikes;
     const numShares = this.props.shares.length;
     var comments = this.state.comments;
     var commentPosts = this.state.commentPosts;
     var commentList = comments.map(function(comment){
                         return <Comment
-                                  author={"John Doe"}
+                                  author={comment.fName + " " + comment.lName}
                                   body={comment.content}
                                 />;
                       });
@@ -104,7 +111,7 @@ class NewsArticleCell extends Component {
           </a>
           <div className="reaction-container">
             <div className="reaction like-container vertical-container u-pull-left" onClick={this.likeArticle}>
-              <Like size={18} className="like-icon vertical-container-child"/>
+              <Like liked={ this.state.liked } />
               <div className="num-likes vertical-container-child">{numLikes}</div>
             </div>
             <div className="reaction share-container vertical-container u-pull-left">
