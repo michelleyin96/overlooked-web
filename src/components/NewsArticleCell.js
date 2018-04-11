@@ -39,19 +39,42 @@ class NewsArticleCell extends Component {
    * Send POST request to like an article.
    */
   likeArticle(event) {
-    // TODO: Add unlike functionality
-    Request.post('https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles/likes')
-      .send({"params" :
-              { "userID" : "5", "articleID" : "1" }
-            })
-      .then(response => {
-        if (response.body.status == "Success") {
-          var likes = this.state.numLikes + 1;
-          const likeOption = this.state.liked;
-          this.setState({ numLikes: likes })
-          this.setState({ liked: !likeOption})
-        }
-      });
+    var articleID = this.props.articleID;
+    if(this.state.liked) {
+      console.log("unlike")
+      Request.del('https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles/likes')
+        .send({"params" :
+                { "userID" : "2", "articleID" : articleID }
+              })
+        .then(response => {
+          console.log(response.body)
+          if (response.body.status == "Success") {
+            var likes = this.state.numLikes - 1;
+            const likeOption = this.state.liked;
+            this.setState({ numLikes: likes })
+            this.setState({ liked: !likeOption})
+          } else if (response.body.status == "Failure") {
+            alert("Failed to like article.");
+          }
+        });
+    } else {
+      console.log("like")
+      Request.post('https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles/likes')
+        .send({"params" :
+                { "userID" : "2", "articleID" : articleID }
+              })
+        .then(response => {
+          console.log(response.body)
+          if (response.body.status == "Success") {
+            var likes = this.state.numLikes + 1;
+            const likeOption = this.state.liked;
+            this.setState({ numLikes: likes })
+            this.setState({ liked: !likeOption})
+          } else if (response.body.status == "Failure") {
+            alert("Failed to like article.");
+          }
+        });
+    }
   }
 
   /**

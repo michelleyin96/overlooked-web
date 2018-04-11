@@ -6,8 +6,6 @@ import NewsTopicBar from '../components/NewsTopicBar';
 import NewsArticleCell from '../components/NewsArticleCell';
 import '../css/All.css';
 
-const DEFAULT_ARTICLES = "default-articles";
-
 class NewsPage extends Component {
   constructor(props) {
     super(props)
@@ -19,10 +17,6 @@ class NewsPage extends Component {
   }
 
   componentWillMount() {
-    const cachedArticles = sessionStorage.getItem(DEFAULT_ARTICLES);
-    if (cachedArticles) {
-      return;
-    }
     var topic = this.state.activeTopic;
     if ((topic == "popular") ||
         (topic == "human rights") ||
@@ -39,7 +33,6 @@ class NewsPage extends Component {
         this.setState({
           articles: response.body.body
         });
-        sessionStorage.setItem(DEFAULT_ARTICLES, JSON.stringify(response.body.body));
       });
   }
 
@@ -65,10 +58,6 @@ class NewsPage extends Component {
 
   render() {
     var default_articles = [];
-    if (sessionStorage.getItem(DEFAULT_ARTICLES) != null) {
-      default_articles = JSON.parse(sessionStorage.getItem(DEFAULT_ARTICLES));
-    }
-
     var articles =
       this.state.articles ? this.state.articles : default_articles;
 
@@ -83,6 +72,7 @@ class NewsPage extends Component {
                                 comments={article.comments}
                                 likes={article.likes}
                                 shares={article.shares}
+                                articleID={article.articleID}
                               />;
                       });
 

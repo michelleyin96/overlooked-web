@@ -9,6 +9,7 @@ import {
 import createBrowserHistory from 'history/createBrowserHistory';
 import HomePage from '../pages/HomePage';
 import NewsPage from '../pages/NewsPage';
+import MyProfilePage from '../pages/MyProfilePage';
 
 const history = createBrowserHistory()
 const checkAuth = () => {
@@ -33,7 +34,8 @@ export default() => (
 	<Router history={ history }>
 		<Switch>
 			<Route path="/" exact component={ HomePage }></Route>
-			<AuthRoute exact path="/news" component= { NewsPage } />
+			<AuthRoute exact path="/news" component={ NewsPage } />
+      <AuthRoute exact path="/profile" component={ MyProfilePage } />
 		</Switch >
 	</Router>
 );
