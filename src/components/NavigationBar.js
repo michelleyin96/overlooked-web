@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  withRouter
+  withRouter,
+  Link
 } from "react-router-dom";
 import firebase from '../firebase';
 import logo from '../img/eyes.png';
@@ -38,8 +39,13 @@ class NavigationBar extends Component {
             <img src={overlooked} className="overlooked vertical-center" alt="overlooked"/>
           </div>
           <div className="right-nav u-pull-right vertical-container">
+            <div className="right-nav-item vertical-container-child">
+              <Link to="/news" className="link">News</Link>
+            </div>
             <div className="right-nav-item vertical-container-child">Looks</div>
-            <div className="right-nav-item vertical-container-child">Profile</div>
+            <div className="right-nav-item vertical-container-child">
+              <Link to="/myprofile" className="link">Profile</Link>
+            </div>
             <div className="right-nav-item vertical-container-child">Settings</div>
             <div className="right-nav-item vertical-container-child" onClick={ this.logOut }>Log Out</div>
           </div>  
