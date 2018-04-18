@@ -46,13 +46,14 @@ class HomePageBody extends Component {
     }
 
     const articlesURL =
-    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articledata?articleID=1&topic=all&numArticles=10&direction=DESC"
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=10&direction=DESC"
 
-    const cachedArticles = sessionStorage.getItem(HomePageArticles);
-    if (cachedArticles) {
-      this.setState({ articles: JSON.parse(cachedArticles) });
-      return;
-    }
+    // const cachedArticles = sessionStorage.getItem(HomePageArticles);
+    // if (cachedArticles) {
+    //   console.log(cachedArticles)
+    //   this.setState({ articles: JSON.parse(cachedArticles) });
+    //   return;
+    // }
 
     Request
       .get(articlesURL)

@@ -42,9 +42,11 @@ class NewsArticleCell extends Component {
     var articleID = this.props.articleID;
     if(this.state.liked) {
       console.log("unlike")
-      Request.del('https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles/likes')
+      Request.del('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles/likes?')
         .send({"params" :
-                { "userID" : "2", "articleID" : articleID }
+                { "sessionID" : "1234",
+                  "articleID" : "1",
+                }
               })
         .then(response => {
           console.log(response.body)
@@ -59,9 +61,9 @@ class NewsArticleCell extends Component {
         });
     } else {
       console.log("like")
-      Request.post('https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articles/likes')
+      Request.post('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles/likes?')
         .send({"params" :
-                { "userID" : "2", "articleID" : articleID }
+                { "sessionID" : "1234", "articleID" : "1" }
               })
         .then(response => {
           console.log(response.body)
@@ -118,9 +120,16 @@ class NewsArticleCell extends Component {
     var commentPostList = commentPosts.map(function(commentText){
                             return <Comment author={"Your Name"} body={commentText}/>;
                           });
+    const nested = this.props.nested;
+    var postClass;
+    if (nested == "true") {
+      postClass = "nested-post";
+    } else {
+      postClass = "post"
+    }
 
     return (
-      <div className="post">
+      <div className={postClass}>
         <div className="article-wrapper">
       		<a href={this.props.url} className="article-container" target="_blank">
             <div className="row">

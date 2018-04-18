@@ -34,6 +34,7 @@ class NavigationBar extends Component {
   		  <div className="wrapper">
           <div className="logo">
             <img src={logo} id="eyes" alt="looks" />
+            <input type="checkbox" className="fake-input"/>
           </div>
           <div className="logo-wrapper">
             <img src={overlooked} className="overlooked vertical-center" alt="overlooked"/>

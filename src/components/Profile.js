@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Request from 'superagent';
+import PostActivity from './PostActivity';
+import ShareActivity from './ShareActivity';
+import CommentActivity from './CommentActivity';
 import George from '../img/george.jpg';
 
 class Profile extends Component {
@@ -57,9 +60,12 @@ class Profile extends Component {
                 onChange={ this.commentTextAreaChange }>
               </textarea>
               <button className="button light-button u-pull-right" onClick={ this.postComment }>
-                Submit
+                Post
               </button>
             </div>
+            <PostActivity />
+            <ShareActivity />
+            <CommentActivity />
           </div>
         </div>
       </div>

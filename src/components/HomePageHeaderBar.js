@@ -38,6 +38,7 @@ class HomePageHeaderBar extends Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
       var user = firebase.auth().currentUser;
+      alert(user.uid);
       this.setState({ authenticatedUser: user});
       localStorage.setItem("authToken", user.uid);
       this.props.history.push("/news");
