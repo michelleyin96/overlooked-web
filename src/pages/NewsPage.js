@@ -5,6 +5,7 @@ import NavigationBar from '../components/NavigationBar';
 import NewsTopicBar from '../components/NewsTopicBar';
 import NewsArticleCell from '../components/NewsArticleCell';
 import '../css/All.css';
+import '../css/index.css';
 
 class NewsPage extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class NewsPage extends Component {
       topic = "all"
     }
     const articlesURL =
-    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articledata?articleID=1&topic="
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic="
     + topic + "&numArticles=%22%22&direction=DESC"
 
     Request
@@ -43,7 +44,7 @@ class NewsPage extends Component {
       topic = "all"
     }
     const articlesURL =
-    "https://c29wreqr05.execute-api.us-west-1.amazonaws.com/test/client/articledata?articleID=1&topic="
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic="
     + topic + "&numArticles=%22%22&direction=DESC"
 
     Request

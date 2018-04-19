@@ -5,6 +5,7 @@ import logo from '../img/Logo-white.png';
 import facebookIcon from '../img/facebook.png';
 import googleIcon from '../img/google-plus.png';
 import '../css/All.css';
+import '../css/index.css';
 
 
 class HomePage extends Component {
