@@ -21,7 +21,7 @@ class NavigationBar extends Component {
    */
   logOut() {
     firebase.auth().signOut().then(() => {
-      localStorage.removeItem("authToken");
+      sessionStorage.removeItem("sessionID");
       this.props.history.push("/");
     }).catch(function(error) {
       alert(error.message)
@@ -34,7 +34,6 @@ class NavigationBar extends Component {
   		  <div className="wrapper">
           <div className="logo">
             <img src={logo} id="eyes" alt="looks" />
-            <input type="checkbox" className="fake-input"/>
           </div>
           <div className="logo-wrapper">
             <img src={overlooked} className="overlooked vertical-center" alt="overlooked"/>
@@ -43,11 +42,15 @@ class NavigationBar extends Component {
             <div className="right-nav-item vertical-container-child">
               <Link to="/news" className="link">News</Link>
             </div>
-            <div className="right-nav-item vertical-container-child">Looks</div>
+            <div className="right-nav-item vertical-container-child">
+              <Link to="/looks" className="link">Looks</Link>
+            </div>
             <div className="right-nav-item vertical-container-child">
               <Link to="/myprofile" className="link">Profile</Link>
             </div>
-            <div className="right-nav-item vertical-container-child">Settings</div>
+            <div className="right-nav-item vertical-container-child">
+              <Link to="/settings" className="link">Settings</Link>
+            </div>
             <div className="right-nav-item vertical-container-child" onClick={ this.logOut }>Log Out</div>
           </div>  
   		  </div>

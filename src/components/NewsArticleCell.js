@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Request from 'superagent';
-import moment from 'moment'
+import moment from 'moment';
 import Comment from './Comment';
 import Like from './HeartIcon';
 import Share from 'react-icons/lib/fa/retweet';
@@ -16,7 +16,12 @@ class NewsArticleCell extends Component {
       comments: this.props.comments,
       commentPosts: [],
       numLikes: this.props.likes.length,
-      liked: false,
+      numShares: this.props.shares.length,
+      viewerHasLiked: this.props.viewerHasLiked,
+      articleID: this.props.articleID,
+      sessionID: this.props.sessionID,
+      viewerName: this.props.viewerName,
+      viewerHasShared: this.props.viewerHasShared,
     }
 
     // Bind action handlers
@@ -39,22 +44,25 @@ class NewsArticleCell extends Component {
    * Send POST request to like an article.
    */
   likeArticle(event) {
-    var articleID = this.props.articleID;
-    if(this.state.liked) {
+    var sessionID = this.state.sessionID;
+    var articleID = this.state.articleID;
+
+    if(this.state.viewerHasLiked) {
       console.log("unlike")
       Request.del('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles/likes?')
         .send({"params" :
-                { "sessionID" : "1234",
-                  "articleID" : "1",
+                { "sessionID" : sessionID,
+                  "articleID" : articleID,
                 }
               })
         .then(response => {
           console.log(response.body)
           if (response.body.status == "Success") {
             var likes = this.state.numLikes - 1;
-            const likeOption = this.state.liked;
-            this.setState({ numLikes: likes })
-            this.setState({ liked: !likeOption})
+            const likeOption = this.state.viewerHasLiked;
+            this.setState({ numLikes: likes,    
+                            viewerHasLiked: !likeOption
+                          })
           } else if (response.body.status == "Failure") {
             alert("Failed to like article.");
           }
@@ -63,15 +71,15 @@ class NewsArticleCell extends Component {
       console.log("like")
       Request.post('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles/likes?')
         .send({"params" :
-                { "sessionID" : "1234", "articleID" : "1" }
+                { "sessionID" : sessionID, "articleID" : articleID }
               })
         .then(response => {
           console.log(response.body)
           if (response.body.status == "Success") {
             var likes = this.state.numLikes + 1;
-            const likeOption = this.state.liked;
+            const likeOption = this.state.viewerHasLiked;
             this.setState({ numLikes: likes })
-            this.setState({ liked: !likeOption})
+            this.setState({ viewerHasLiked: !likeOption})
           } else if (response.body.status == "Failure") {
             alert("Failed to like article.");
           }
@@ -83,17 +91,78 @@ class NewsArticleCell extends Component {
    * POST request when user attempts to comment on an article.
    */
   postComment(event) {
-    var newComments = this.state.commentPosts;
-    newComments.push(this.state.commentText);
-    this.setState({ commentPosts: newComments });
-    this.setState({ commentText: "" });
+    var sessionID = this.state.sessionID;
+    var articleID = this.state.articleID;
+    var commentText = this.state.commentText;
+    var commentURL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles/comments?";
+
+    Request.post(commentURL)
+      .send({"params" :
+              { "sessionID" : sessionID,
+                "articleID" : articleID,
+                "content" : commentText }
+            })
+      .then(response => {
+        console.log(response.body)
+        if (response.body.status == "Success") {
+          var newComments = this.state.commentPosts;
+          newComments.push(this.state.commentText);
+          this.setState({ commentPosts: newComments });
+          this.setState({ commentText: "" });
+        } else if (response.body.status == "Failure") {
+          alert("Failed to post comment.");
+        }
+      });
   }
 
   /**
    * POST request when user wants to share an article.
    */
   shareArticle(event) {
+    var sessionID = this.state.sessionID;
+    var articleID = this.state.articleID;
+    var shareURL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles/shares?";
 
+    if(this.state.viewerHasShared) {
+      console.log("unshare")
+      Request.del(shareURL)
+        .send({"params" :
+                { "sessionID" : sessionID,
+                  "articleID" : articleID,
+                }
+              })
+        .then(response => {
+          console.log(response.body)
+          if (response.body.status == "Success") {
+            var shares = this.state.numShares - 1;
+            const shareOption = this.state.viewerHasShared;
+            this.setState({ numShares: shares,    
+                            viewerHasShared: !shareOption
+                          })
+          } else if (response.body.status == "Failure") {
+            alert("Failed to Share article.");
+          }
+        });
+    } else {
+      console.log("share")
+      Request.post(shareURL)
+        .send({"params" :
+                { "sessionID" : sessionID,
+                  "articleID" : articleID
+                }
+              })
+        .then(response => {
+          console.log(response.body)
+          if (response.body.status == "Success") {
+            var shares = this.state.numShares + 1;
+            const shareOption = this.state.viewerHasShared;
+            this.setState({ numShares: shares })
+            this.setState({ viewerHasShared: !shareOption})
+          } else if (response.body.status == "Failure") {
+            alert("Failed to like article.");
+          }
+        });
+    }
   }
 
   /**
@@ -108,17 +177,22 @@ class NewsArticleCell extends Component {
     const date = moment(this.props.date).format('MMM DD, YYYY');
     const context = this.props.author + " · " + date;
     const numLikes = this.state.numLikes;
-    const numShares = this.props.shares.length;
+    const numShares = this.state.numShares;
     var comments = this.state.comments;
     var commentPosts = this.state.commentPosts;
+    var yourName = this.state.viewerName;
+    var viewerID = this.state.sessionID;
     var commentList = comments.map(function(comment){
                         return <Comment
                                   author={comment.fName + " " + comment.lName}
+                                  authorID={comment.sessionID}
                                   body={comment.content}
+                                  date={comment.dateAdded}
+                                  viewerID={viewerID}
                                 />;
                       });
     var commentPostList = commentPosts.map(function(commentText){
-                            return <Comment author={"Your Name"} body={commentText}/>;
+                            return <Comment author={ yourName } body={commentText}/>;
                           });
     const nested = this.props.nested;
     var postClass;
@@ -143,10 +217,10 @@ class NewsArticleCell extends Component {
           </a>
           <div className="reaction-container">
             <div className="reaction like-container vertical-container u-pull-left" onClick={this.likeArticle}>
-              <Like liked={ this.state.liked } />
+              <Like liked={ this.state.viewerHasLiked } />
               <div className="num-likes vertical-container-child">{numLikes}</div>
             </div>
-            <div className="reaction share-container vertical-container u-pull-left">
+            <div className="reaction share-container vertical-container u-pull-left" onClick={this.shareArticle}>
               <Share size={20} className="like-icon u-pull-left vertical-container-child"/>
               <div className="num-likes vertical-container-child">{numShares}</div>
             </div>

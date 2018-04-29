@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
+import Request from 'superagent';
+import { Link, withRouter } from "react-router-dom";
 import firebase from '../firebase';
 import logo from '../img/Logo-white.png';
 
@@ -38,10 +39,22 @@ class HomePageHeaderBar extends Component {
 
     firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
       var user = firebase.auth().currentUser;
-      alert(user.uid);
-      this.setState({ authenticatedUser: user});
-      localStorage.setItem("authToken", user.uid);
-      this.props.history.push("/news");
+      Request
+        .post('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/login?')
+        .send({"params" :
+                {
+                  "firebaseID": user.uid, 
+                }
+              })
+        .then(response => {
+          if (response.body.status == "Success") {
+            localStorage.setItem("sessionID", response.body.body);
+            this.props.history.push("/news");
+          } else {
+            alert("Failed to log in." + response.body.status);
+            return;
+          }
+        })
     }, function(error) {
       alert(error.message);
     });
@@ -51,7 +64,7 @@ class HomePageHeaderBar extends Component {
     return (
   		  <div className="wrapper">
   		    <div className="login">
-  		    	<div className="form-group">
+  		    	<div className="form-group flex-box">
   		    		<input
                 id="email"
                 type="text"
@@ -77,7 +90,7 @@ class HomePageHeaderBar extends Component {
                 onClick={this.logInUser}
               />
   		    	</div>
-  		    	<a className="u-pull-right forgot-pass">Forgot password?</a>
+  		    	<Link to="/resetpassword" className="u-pull-right forgot-pass">Forgot password?</Link>
   		    </div>
   		  </div>
     )

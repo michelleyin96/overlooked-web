@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  browserHistory,
   withRouter
 } from "react-router-dom";
 import Request from 'superagent';
@@ -32,6 +33,7 @@ class HomePageBody extends Component {
     this.pwdChange = this.pwdChange.bind(this);
     this.handleFacebookLogin = this.handleFacebookLogin.bind(this);
     this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
+    this.redirectToHome = this.redirectToHome.bind(this);
   }
 
   componentWillMount() {
@@ -46,19 +48,12 @@ class HomePageBody extends Component {
     }
 
     const articlesURL =
-    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=10&direction=DESC"
-
-    // const cachedArticles = sessionStorage.getItem(HomePageArticles);
-    // if (cachedArticles) {
-    //   console.log(cachedArticles)
-    //   this.setState({ articles: JSON.parse(cachedArticles) });
-    //   return;
-    // }
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=%22%22&direction=DESC&sessionID=0"
 
     Request
       .get(articlesURL)
       .then(response => {
-        sessionStorage.setItem(HomePageArticles, JSON.stringify(response.body.body));
+        localStorage.setItem(HomePageArticles, JSON.stringify(response.body.body));
         this.setState({ articles: response.body.body });
       });
   }
@@ -68,25 +63,81 @@ class HomePageBody extends Component {
    */
   handleGoogleLogin() {
     var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      // ...
-    }).catch(function(error) {
-      alert(error.message)
-    });
+    firebase.auth().signInWithPopup(provider).then(result => {
+        var token = result.credential.accessToken;
+        var name = result.user.displayName;
+        var email = result.user.email;
+        var firebaseID = result.user.uid;
+        var nameArr = name.split(" ");
 
-    this.props.history.push("/news")
+        Request
+          .post('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?')
+          .send({"params" :
+                  {
+                    "firebaseID": firebaseID, 
+                    "email": email,
+                    "fName": nameArr[0],
+                    "lName": nameArr[1],
+                    "bio": " ",
+                  }
+                })
+          .then(response => {
+            if (response.body.status == "Success") {
+              localStorage.setItem("sessionID", response.body.body);
+              this.props.history.push("/news");
+            } else if (response.body.status == "Failure") {
+              alert("Failed to log in.");
+              return;
+            }
+          })
+      }).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message + " Facebook Login Failed.";
+        var email = error.email;
+        var credential = error.credential;
+        alert(errorMessage);
+      });
   }
 
   /**
    * Enables Facebook Login
    */
   handleFacebookLogin() {
-    alert("redirect");
-    this.props.history.push("/news")
+    var provider = new firebase.auth.FacebookAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(result => {
+      var token = result.credential.accessToken;
+      var name = result.user.displayName;
+      var email = result.user.email;
+      var firebaseID = result.user.uid;
+      var nameArr = name.split(" ");
+
+      Request
+        .post('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?')
+        .send({"params" :
+                {
+                  "firebaseID": firebaseID, 
+                  "email": email,
+                  "fName": nameArr[0],
+                  "lName": nameArr[1],
+                  "bio": " ",
+                }
+              })
+        .then(response => {
+          if (response.body.status == "Success") {
+            localStorage.setItem("sessionID", response.body.body);
+            this.props.history.push("/news");
+          } else if (response.body.status == "Failure") {
+            alert("Failed to log in.");
+            return;
+          }
+        })
+    }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message + " Facebook Login Failed.";
+      var email = error.email;
+      var credential = error.credential;
+      alert(errorMessage);
+    });
   }
 
   /**
@@ -129,21 +180,33 @@ class HomePageBody extends Component {
    *
    */
   createAccount() {
-    var email = this.state.email
-    var password = this.state.pwd
-    var name = this.state.fname + " " + this.state.lname
+    var email = this.state.email;
+    var password = this.state.pwd;
+    var fname = this.state.fname;
+    var lname = this.state.lname;
 
     firebase.auth().createUserWithEmailAndPassword(email, password).then((user) => {
         var user = firebase.auth().currentUser;
-        user.updateProfile({
-          displayName: name,
-        }).then(() => {
-          this.setState({ authenticatedUser: user });
-          localStorage.setItem("authToken", user.uid)
-          this.props.history.push("/news")
-        }).catch(function(error) {
-          alert(error.message)
-        });
+        Request
+          .post('https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?')
+          .send({"params" :
+                  {
+                    "firebaseID": user.uid, 
+                    "email": email,
+                    "fName": fname,
+                    "lName": lname,
+                    "bio": " ",
+                  }
+                })
+          .then(response => {
+            if (response.body.status == "Success") {
+              localStorage.setItem("sessionID", response.body.body);
+              this.props.history.push("/news");
+            } else if (response.body.status == "Failure") {
+              alert("Failed to log in.");
+              return;
+            }
+          })
     }, function(error) {
         alert(error.message)
         var errorCode = error.code;

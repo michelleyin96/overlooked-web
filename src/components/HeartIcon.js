@@ -8,7 +8,6 @@ class HeartIcon extends Component {
   }
 
 	render() {
-    console.log(this.props.liked)
     if (!this.props.liked) {
       return <Like size={18} className="like-icon vertical-container-child"/>
     }
