@@ -179,6 +179,7 @@ class Profile extends Component {
                                 });
 
     var articleActivities = [];
+    articleActivities = this.props.articleActivities ? this.props.articleActivities : [];
     var articlesActivitiesList = articleActivities.map(function(activity){
                                   return <ShareActivity
                                             displayName={displayName}

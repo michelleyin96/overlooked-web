@@ -78,7 +78,8 @@ class HomePageBody extends Component {
                     "email": email,
                     "fName": nameArr[0],
                     "lName": nameArr[1],
-                    "bio": " ",
+                    "bio": "",
+                    "profilePic" : "",
                   }
                 })
           .then(response => {
@@ -119,7 +120,8 @@ class HomePageBody extends Component {
                   "email": email,
                   "fName": nameArr[0],
                   "lName": nameArr[1],
-                  "bio": " ",
+                  "bio": "",
+                  "profilePic" : "",
                 }
               })
         .then(response => {
@@ -195,10 +197,14 @@ class HomePageBody extends Component {
                     "email": email,
                     "fName": fname,
                     "lName": lname,
-                    "bio": " ",
+                    "bio": "",
+                    "profilePic" : "",
                   }
                 })
           .then(response => {
+            if (response.body.errorMessage) {
+              alert("Unsuccessful");
+            }
             if (response.body.status == "Success") {
               localStorage.setItem("sessionID", response.body.body);
               this.props.history.push("/news");
@@ -242,19 +248,21 @@ class HomePageBody extends Component {
           <div className="six columns right-container u-pull-right">
             <HomePageHeaderBar />
             <h4>Create an account</h4>
-            <h6>Or sign up with social</h6>
-            <div className="social-buttons">
-              <button className="social facebook" onClick={ this.handleFacebookLogin }>
-                <div className="img-wrapper">
-                  <img className="social-icon" src={facebookIcon} alt="google"/>
-                </div>
-              </button>
-              <button className="social google" onClick={ this.handleGoogleLogin }>
-                <div className="img-wrapper">
-                  <img className="social-icon" src={googleIcon} alt="google"/>
-                </div>
-              </button>
-            </div>
+            { /*
+              <h6>Or sign up with social</h6>
+              <div className="social-buttons">
+                <button className="social facebook" onClick={ this.handleFacebookLogin }>
+                  <div className="img-wrapper">
+                    <img className="social-icon" src={facebookIcon} alt="google"/>
+                  </div>
+                </button>
+                <button className="social google" onClick={ this.handleGoogleLogin }>
+                  <div className="img-wrapper">
+                    <img className="social-icon" src={googleIcon} alt="google"/>
+                  </div>
+                </button>
+              </div>
+            */}
             <div className="signup-form">
               <div className="row">
                 <div className="twelve columns">

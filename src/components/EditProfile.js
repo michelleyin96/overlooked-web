@@ -13,6 +13,8 @@ class EditProfile extends Component {
     this.lNameChange = this.lNameChange.bind(this);
     this.bioChange = this.bioChange.bind(this);
     this.postChanges = this.postChanges.bind(this);
+    this.uploadPhoto = this.uploadPhoto.bind(this);
+    this.postPhoto = this.postPhoto.bind(this);
 	}
 
   /**
@@ -64,6 +66,7 @@ class EditProfile extends Component {
                 "fName": fName,
                 "lName": lName,
                 "bio": bio,
+                "profilePic": "",
               }
             })
       .then(response => {
@@ -76,6 +79,60 @@ class EditProfile extends Component {
         }
       })
   }
+
+  /**
+   * Upload profile photo
+   */
+  uploadPhoto(event) {
+    var filelist = event.target.files;
+    var numFiles = filelist.length;
+    if (numFiles > 0) {
+      var reader = new FileReader();
+      reader.readAsDataURL(filelist[numFiles - 1]);
+    }
+    reader.onload = (event) => {
+      this.postPhoto(reader.result)
+    }
+  }
+
+  /**
+   * Update Profile Picture
+   */
+  postPhoto(photo) {
+    const putURL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?"
+    const sessionID = localStorage.getItem("sessionID");
+    if (!sessionID) {
+      alert("You must re log in to view this page.");
+      this.props.history.push("/");
+    }
+    const fName = this.state.fName;
+    const lName = this.state.lName;
+    const bio = this.state.bio;
+    const email = this.state.email;
+
+    Request
+      .post(putURL)
+      .send({"params" :
+              {
+                "sessionID": sessionID, 
+                "email": email,
+                "fName": fName,
+                "lName": lName,
+                "bio": bio,
+                "profilePic": photo,
+              }
+            })
+      .then(response => {
+        if (response.body.status == "Success") {
+          alert("Successfully saved changes.")
+          // this.props.history.push("/news");
+        } else {
+          alert("Failed to save changes. " + response.body.status);
+          return;
+        }
+      })
+  }
+
 
   componentWillMount() {
     const sessionID = localStorage.getItem("sessionID");
@@ -115,7 +172,9 @@ class EditProfile extends Component {
               <input
                 type="file"
                 id="file-upload"
+                accept=".jpg, .jpeg, .png"
                 ref={(ref) => this.upload = ref}
+                onChange={(event) => { this.uploadPhoto(event) }}
                 style={{ display: 'none' }}
               />
             </div>
