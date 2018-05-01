@@ -34,6 +34,8 @@ input {
 
 $dark-blue: #0B3C5D;
 $light-blue: #328cc1;
+$grey: #edefed;
+$grey-text: #999;
 
 .dark-button {
 	background-color: $dark-blue;
@@ -58,22 +60,39 @@ $light-blue: #328cc1;
 .logo {
 	width: 250px;
 }
+
+
+// begin code css
 .wrapper {
-	margin-bottom: 50px;
+	margin-bottom: 100px;
+	.flex-box {
+		display: flex;
+		flex-direction: row;
+		@media (max-width: 550px) {
+			flex-direction: column;
+
+		}
+	}
 	.login {
 		.email {
+			order: 1;
+			flex-grow: 1;
 			@media (max-width: 550px) {
 				width: 100%;
 				margin-bottom: 20px;
 			}
 		}
 		.password {
+			order: 2;
+			flex-grow: 1;
 			@media (max-width: 550px) {
 				width: 100%;
 				margin-bottom: 20px;
 			}
 		}
 		.login-button {
+			order: 3;
+			flex-shrink: 1;
 			@media (max-width: 550px) {
 				width: 100%;
 				margin-bottom: 20px;
@@ -99,6 +118,26 @@ $light-blue: #328cc1;
 	height: 65px;
     border-bottom: 1px solid #ddd;
     width: 100%;
+    .searchbar {
+    	display: flex;
+    	height: 100%;
+    	position: absolute;
+    	left: 90px;
+    	#search {
+    		align-self: center;
+    		margin-right: 0px;
+    		width: 250px;
+    	}
+    	.submit-search {
+    		position: relative;
+    		right: 25px;
+    		align-self: center;
+    		color: $dark-blue;
+    		&:hover {
+    			cursor: pointer;
+    		}
+    	}
+    }
     .wrapper {
     	width: 100%;
     	height: 100%;
@@ -123,9 +162,19 @@ $light-blue: #328cc1;
     .logo-wrapper {
     	text-align: center;
     	width: 100%;
+    	@media (max-width: 550px) {
+    		display: none;
+    	}
     }
     .overlooked {
     	width: 180px;
+    }
+    .link {
+    	text-decoration: none;
+    	color: black;
+    	&:hover {
+    		color: $light-blue;
+    	}
     }
     .right-nav {
     	height: 100%;
@@ -139,6 +188,136 @@ $light-blue: #328cc1;
     	&:hover {
     		color: $light-blue;
     	}
+    	@media (max-width: 550px) {
+    		display: none;
+    	}
+    }
+    #menuToggle
+    {
+      display: inline-block;
+      position: relative;  
+      z-index: 1;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    #menuToggle input
+    {
+      display: block;
+      width: 40px;
+      height: 32px;
+      position: absolute;
+      top: -7px;
+      left: -5px;
+      
+      cursor: pointer;
+      
+      opacity: 0; /* hide this */
+      z-index: 2; /* and place it over the hamburger */
+      
+      -webkit-touch-callout: none;
+    }
+
+    /*
+     * Just a quick hamburger
+     */
+    #menuToggle span
+    {
+      display: block;
+      width: 33px;
+      height: 4px;
+      top: 20px;
+      left: 20px;
+      margin-bottom: 5px;
+      position: relative;
+      background: #cdcdcd;
+      border-radius: 3px;
+      z-index: 1;
+      transform-origin: -10px 5px;
+      transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                  background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+                  opacity 0.55s ease;
+       @media (min-width: 550px) {
+       	display: none;
+       }
+    }
+
+    #menuToggle span:first-child
+    {
+      transform-origin: 0% 0%;
+      top: 10px;
+    }
+
+    #menuToggle span:nth-last-child(2)
+    {
+      transform-origin: 0% 100%;
+    }
+
+    /* 
+     * Transform all the slices of hamburger
+     * into a crossmark.
+     */
+    #menuToggle input:checked ~ span
+    {
+      opacity: 1;
+      transform: rotate(45deg) translate(-2px, -1px);
+      background: #232323;
+      width: 33px;
+      height: 4px;
+    }
+
+    /*
+     * But let's hide the middle one.
+     */
+    #menuToggle input:checked ~ span:nth-last-child(3)
+    {
+      opacity: 0;
+      transform: rotate(0deg) scale(0.2, 0.2);
+    }
+
+    /*
+     * Ohyeah and the last one should go the other direction
+     */
+    #menuToggle input:checked ~ span:nth-last-child(2)
+    {
+      transform: rotate(-45deg) translate(0, -1px);
+    }
+
+    /*
+     * Make this absolute positioned
+     * at the top left of the screen
+     */
+    #menu
+    {
+      position: absolute;
+      width: 300px;
+      margin: -100px 0 0 -50px;
+      padding: 50px;
+      padding-top: 125px;
+      
+      background: #ededed;
+      list-style-type: none;
+      -webkit-font-smoothing: antialiased;
+      /* to stop flickering of text in safari */
+      
+      transform-origin: 0% 0%;
+      transform: translate(-100%, 0);
+      
+      transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+    }
+
+    #menu li
+    {
+      padding: 10px 0;
+      font-size: 22px;
+    }
+
+    /*
+     * And let's slide it in from the left
+     */
+    #menuToggle input:checked ~ ul
+    {
+      transform: none;
     }
 }
 
@@ -150,6 +329,12 @@ $light-blue: #328cc1;
 .post {
 	margin-bottom: 30px;
 	border: 1px solid #e6ecf0;
+	border-radius: 5px;
+}
+
+.nested-post {
+	border: none;
+	margin-bottom: 0;
 	border-radius: 5px;
 }
 
@@ -173,6 +358,9 @@ $light-blue: #328cc1;
 	.comment-author {
 		font-weight: 600;
 		font-size: 14px;
+		margin-bottom: 0;
+		margin-right: 5px;
+		display: inline-block;
 		&:hover {
 			cursor: pointer;
 		}
@@ -180,6 +368,12 @@ $light-blue: #328cc1;
 	.comment-body {
 		font-size: 14px;
 		margin-bottom: 0;
+	}
+	.comment-date {
+		font-size: 14px;
+		font-weight: 500;
+		display: inline-block;
+		color: $grey-text;
 	}
 }
 
@@ -216,24 +410,25 @@ $light-blue: #328cc1;
 		font-size: 14px;
 		margin-bottom: 0;
 	}
-	.reaction-container {
-		width: 100%;
-		height: 22px;
-		padding: 10px 0;
-		.reaction {
-			width: 33%;
-			&:hover {
-				color: #b71c1c;
-				cursor: pointer;
-			}
-		}
-		.like-icon {
-			margin-right: 5px;
-		}
-		.liked-icon {
+}
+
+.reaction-container {
+	width: 100%;
+	height: 22px;
+	padding: 10px 0;
+	.reaction {
+		width: 33%;
+		&:hover {
 			color: #b71c1c;
-			margin-right: 5px;
+			cursor: pointer;
 		}
+	}
+	.like-icon {
+		margin-right: 5px;
+	}
+	.liked-icon {
+		color: #b71c1c;
+		margin-right: 5px;
 	}
 }
 
@@ -266,7 +461,7 @@ $light-blue: #328cc1;
 		width: 30px;
 	}
 	.signup-form {
-		margin-top: 50px;
+		margin-top: 25px;
 		.row {
 			margin-bottom: 15px;
 		}
@@ -283,6 +478,7 @@ $light-blue: #328cc1;
 		padding: 50px 60px;
 		@media (min-width: 550px) {
 			width: 50%;
+			min-height: 100vh;
 		}
 	}
 	.right-container {
@@ -296,6 +492,12 @@ $light-blue: #328cc1;
 .news-page {
 	.news-topic-bar {
 		margin-top: 25px;
+	}
+	.news-topic {
+		display: inline-block;
+		h5 {
+			margin-right: 40px;
+		}
 	}
 	.topic {
 		text-align: center;
@@ -316,3 +518,176 @@ $light-blue: #328cc1;
 		margin-top: 30px;
 	}
 }
+
+.profile-page {
+  .border {
+    border: 1px solid #e6ecf0;
+  }
+  .profile-container {
+    width: 80%;
+    margin: 20px auto;
+  }
+	.profile-photo {
+    width: 100%;
+    margin-bottom: 30px;
+    .img {
+      width: 100%;
+    }
+    .placeholder-photo {
+    	background-color: #A9A9A9;
+    	width: 100%;
+    	height: 200px;
+    	margin-bottom: 30px;
+    	display: flex;
+    	justify-content: center;
+    	.user-icon {
+    		align-self: flex-end;
+    		color: white;
+    	}
+    }
+  }
+  .about {
+    margin-bottom: 30px;
+  }
+  .title-box {
+    height: 30px;
+    background-color: white;
+    padding: 10px;
+    font-size: 18px;
+    border-bottom: 1px solid #e6ecf0;
+    font-weight: bold;
+  }
+  .info {
+    padding: 10px;
+    background-color: white;
+  }
+  .follower-info {
+    cursor: pointer;
+    .text, .number {
+      display: inline-block;
+    }
+    .number {
+      float: right;
+      color: $light-blue;
+      font-weight: bold;
+    }
+  }
+  .followers {
+    margin-bottom: 15px;
+  }
+  .edit-profile {
+    width: 100%;
+    background-color: $light-blue;
+    color: white;
+    border-radius: 5px;
+  }
+  .write-post {
+  	overflow: auto;
+  	margin-bottom: 30px;
+  }
+  .center {
+  	text-align: center;
+  }
+}
+
+.modal-header {
+	padding: 20px 80px;
+	text-align: left;
+}
+
+.user {
+	font-weight: bold;
+	color: $light-blue;
+	cursor: pointer;
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.settings-page {
+	#editFName {
+		margin-bottom: 10px;
+	}
+	.action {
+		color: $light-blue;
+		font-size: 24px;
+		text-decoration: underline;
+		margin-bottom: 15px;
+		cursor: pointer;
+	}
+}
+
+.article-share, .article-comment {
+	background-color: white;
+	border: 1px solid #e6ecf0;
+	border-radius: 5px;
+	padding: 10px;
+	margin-bottom: 30px;
+	.space {
+		margin-right: 5px;
+	}
+	.name, .article-title {
+		font-weight: bold;
+		color: $light-blue;
+		cursor: pointer;
+	}
+	.title {
+		padding-left: 5px;
+	}
+	.comment-text {
+		padding-left: 5px;
+		margin-bottom: 10px;
+	}
+	.date {
+		color: #999;
+		font-size: 12px;
+		padding-left: 6px;
+		margin-bottom: 5px;
+	}
+}
+
+.looks-page {
+	.looks-feed {
+		padding: 2% 10%;
+	}
+}
+
+.password-container {
+	text-align: center;
+	margin: 10% auto;
+	.email {
+		display: block;
+		margin: 10px auto;
+		width: 350px;
+	}
+	.button {
+		background-color: $light-blue;
+		color: white;
+		margin: 10px auto;
+		width: 350px;
+	}
+}
+
+.search-result-page {
+	.results-container {
+		padding-top: 40px;
+		h5 {
+			font-weight: bold;
+		}
+	}
+	.header {
+		font-weight: 600;
+	}
+	.results {
+		border: 1px solid #e6ecf0;
+		background-color: white;
+		padding: 10px;
+		margin-bottom: 50px;
+	}
+	.title {
+		font-weight: 600;
+	}
+}
+
+
+

@@ -18,6 +18,13 @@ class NewsPage extends Component {
   }
 
   componentWillMount() {
+    const sessionID = localStorage.getItem('sessionID');
+    const viewerName = localStorage.getItem('viewerName');
+
+    if (!sessionID) {
+      alert("Must be logged in to view articles.");
+    }
+
     var topic = this.state.activeTopic;
     if ((topic == "popular") ||
         (topic == "human rights") ||
@@ -25,8 +32,8 @@ class NewsPage extends Component {
       topic = "all"
     }
     const articlesURL =
-    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic="
-    + topic + "&numArticles=%22%22&direction=DESC"
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?topic="
+    + topic + "&sessionID=" + sessionID;
 
     Request
       .get(articlesURL)
@@ -35,6 +42,16 @@ class NewsPage extends Component {
           articles: response.body.body
         });
       });
+
+    const userURL
+      = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?sessionID=" + sessionID;
+
+      Request
+        .get(userURL)
+        .then(response => {
+          var name = response.body.body.fName + " " + response.body.body.lName;
+          localStorage.setItem('viewerName', name);
+        });
   }
 
   _newActiveTopic(topic) {
@@ -43,9 +60,14 @@ class NewsPage extends Component {
         (topic == "universities")) {
       topic = "all"
     }
+    const sessionID = localStorage.getItem('sessionID');
+    if (!sessionID) {
+      alert("Must be logged in to view articles.");
+    }
     const articlesURL =
-    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic="
-    + topic + "&numArticles=%22%22&direction=DESC"
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?topic="
+    + topic + "&sessionID=" + sessionID;
+
 
     Request
       .get(articlesURL)
@@ -58,6 +80,9 @@ class NewsPage extends Component {
   }
 
   render() {
+    const sessionIDProp = localStorage.getItem("sessionID");
+    const viewerNameProp = localStorage.getItem("viewerName");
+
     var default_articles = [];
     var articles =
       this.state.articles ? this.state.articles : default_articles;
@@ -74,6 +99,10 @@ class NewsPage extends Component {
                                 likes={article.likes}
                                 shares={article.shares}
                                 articleID={article.articleID}
+                                sessionID={sessionIDProp}
+                                viewerName={viewerNameProp}
+                                viewerHasLiked={article.userHasLiked}
+                                viewerHasShared={article.userHasShared}
                               />;
                       });
 

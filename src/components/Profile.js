@@ -12,6 +12,7 @@ import User from './User';
 import George from '../img/george.jpg';
 import 'react-responsive-modal/lib/react-responsive-modal.css';
 import Modal from 'react-responsive-modal/lib/css';
+import UserIcon from 'react-icons/lib/fa/user';
 
 class Profile extends Component {
 
@@ -225,12 +226,20 @@ class Profile extends Component {
                       })
     }
 
+    const profilePic = this.state.profilePic ? (
+                     <img src={this.state.profilePicURL} className="img"/>
+                   ) : (
+                     <div className="placeholder-photo">
+                        <UserIcon size={150} className="user-icon"/>
+                      </div>
+                   );
+
     return (
       <div className="profile-container">
         <div className="row">
           <div className="three columns">
             <div className="profile-photo">
-              <img src={George} className="img"/>
+              { profilePic }
             </div>
             <div className="about border">
               <div className="title-box">{ this.props.displayName }</div>

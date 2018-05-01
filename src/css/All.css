@@ -877,6 +877,11 @@ input {
     width: 100%; }
   .navigation .overlooked {
     width: 180px; }
+  .navigation .link {
+    text-decoration: none;
+    color: black; }
+    .navigation .link:hover {
+      color: #328cc1; }
   .navigation .right-nav {
     height: 100%;
     padding-right: 10px; }
@@ -998,7 +1003,8 @@ input {
     padding: 50px 60px; }
     @media (min-width: 550px) {
       .homepage-body .left-container {
-        width: 50%; } }
+        width: 50%;
+        min-height: 100vh; } }
   .homepage-body .right-container {
     padding: 50px 60px; }
     @media (min-width: 550px) {
@@ -1021,5 +1027,56 @@ input {
   transition: background .175s ease-out, color .175s ease-in-out; }
 .news-page .article-container {
   margin-top: 30px; }
+
+.profile-page .border {
+  border: 1px solid #e6ecf0; }
+.profile-page .profile-container {
+  width: 80%;
+  margin: 20px auto; }
+.profile-page .profile-photo {
+  width: 100%;
+  margin-bottom: 30px; }
+  .profile-page .profile-photo .img {
+    width: 100%; }
+.profile-page .about {
+  margin-bottom: 30px; }
+.profile-page .title-box {
+  height: 30px;
+  background-color: white;
+  padding: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #e6ecf0;
+  font-weight: bold; }
+.profile-page .info {
+  padding: 10px;
+  background-color: white; }
+.profile-page .follower-info {
+  cursor: pointer; }
+  .profile-page .follower-info .text, .profile-page .follower-info .number {
+    display: inline-block; }
+  .profile-page .follower-info .number {
+    float: right;
+    color: #328cc1;
+    font-weight: bold; }
+.profile-page .followers {
+  margin-bottom: 15px; }
+.profile-page .edit-profile {
+  width: 100%;
+  background-color: #328cc1;
+  color: white;
+  border-radius: 5px; }
+.profile-page .write-post {
+  overflow: auto; }
+
+.article-share {
+  background-color: white;
+  border: 1px solid #e6ecf0;
+  border-radius: 5px;
+  padding: 10px; }
+  .article-share .space {
+    margin-right: 5px; }
+  .article-share .name, .article-share .article-title {
+    font-weight: bold;
+    color: #0B3C5D; }
 
 /*# sourceMappingURL=All.css.map */

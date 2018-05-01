@@ -43,19 +43,34 @@ input {
   width: 250px; }
 
 .wrapper {
-  margin-bottom: 50px; }
-  @media (max-width: 550px) {
-    .wrapper .login .email {
-      width: 100%;
-      margin-bottom: 20px; } }
-  @media (max-width: 550px) {
-    .wrapper .login .password {
-      width: 100%;
-      margin-bottom: 20px; } }
-  @media (max-width: 550px) {
-    .wrapper .login .login-button {
-      width: 100%;
-      margin-bottom: 20px; } }
+  margin-bottom: 100px; }
+  .wrapper .flex-box {
+    display: flex;
+    flex-direction: row; }
+    @media (max-width: 550px) {
+      .wrapper .flex-box {
+        flex-direction: column; } }
+  .wrapper .login .email {
+    order: 1;
+    flex-grow: 1; }
+    @media (max-width: 550px) {
+      .wrapper .login .email {
+        width: 100%;
+        margin-bottom: 20px; } }
+  .wrapper .login .password {
+    order: 2;
+    flex-grow: 1; }
+    @media (max-width: 550px) {
+      .wrapper .login .password {
+        width: 100%;
+        margin-bottom: 20px; } }
+  .wrapper .login .login-button {
+    order: 3;
+    flex-shrink: 1; }
+    @media (max-width: 550px) {
+      .wrapper .login .login-button {
+        width: 100%;
+        margin-bottom: 20px; } }
   .wrapper .forgot-pass {
     color: #0B3C5D; }
     .wrapper .forgot-pass:hover {
@@ -68,7 +83,43 @@ input {
 .navigation {
   height: 65px;
   border-bottom: 1px solid #ddd;
-  width: 100%; }
+  width: 100%;
+  /*
+   * Just a quick hamburger
+   */
+  /* 
+   * Transform all the slices of hamburger
+   * into a crossmark.
+   */
+  /*
+   * But let's hide the middle one.
+   */
+  /*
+   * Ohyeah and the last one should go the other direction
+   */
+  /*
+   * Make this absolute positioned
+   * at the top left of the screen
+   */
+  /*
+   * And let's slide it in from the left
+   */ }
+  .navigation .searchbar {
+    display: flex;
+    height: 100%;
+    position: absolute;
+    left: 90px; }
+    .navigation .searchbar #search {
+      align-self: center;
+      margin-right: 0px;
+      width: 250px; }
+    .navigation .searchbar .submit-search {
+      position: relative;
+      right: 25px;
+      align-self: center;
+      color: #0B3C5D; }
+      .navigation .searchbar .submit-search:hover {
+        cursor: pointer; }
   .navigation .wrapper {
     width: 100%;
     height: 100%;
@@ -90,8 +141,16 @@ input {
   .navigation .logo-wrapper {
     text-align: center;
     width: 100%; }
+    @media (max-width: 550px) {
+      .navigation .logo-wrapper {
+        display: none; } }
   .navigation .overlooked {
     width: 180px; }
+  .navigation .link {
+    text-decoration: none;
+    color: black; }
+    .navigation .link:hover {
+      color: #328cc1; }
   .navigation .right-nav {
     height: 100%;
     padding-right: 10px; }
@@ -102,6 +161,78 @@ input {
     transition: color .1s ease-in-out; }
     .navigation .right-nav-item:hover {
       color: #328cc1; }
+    @media (max-width: 550px) {
+      .navigation .right-nav-item {
+        display: none; } }
+  .navigation #menuToggle {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    -webkit-user-select: none;
+    user-select: none; }
+  .navigation #menuToggle input {
+    display: block;
+    width: 40px;
+    height: 32px;
+    position: absolute;
+    top: -7px;
+    left: -5px;
+    cursor: pointer;
+    opacity: 0;
+    /* hide this */
+    z-index: 2;
+    /* and place it over the hamburger */
+    -webkit-touch-callout: none; }
+  .navigation #menuToggle span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    top: 20px;
+    left: 20px;
+    margin-bottom: 5px;
+    position: relative;
+    background: #cdcdcd;
+    border-radius: 3px;
+    z-index: 1;
+    transform-origin: -10px 5px;
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease; }
+    @media (min-width: 550px) {
+      .navigation #menuToggle span {
+        display: none; } }
+  .navigation #menuToggle span:first-child {
+    transform-origin: 0% 0%;
+    top: 10px; }
+  .navigation #menuToggle span:nth-last-child(2) {
+    transform-origin: 0% 100%; }
+  .navigation #menuToggle input:checked ~ span {
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: #232323;
+    width: 33px;
+    height: 4px; }
+  .navigation #menuToggle input:checked ~ span:nth-last-child(3) {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.2, 0.2); }
+  .navigation #menuToggle input:checked ~ span:nth-last-child(2) {
+    transform: rotate(-45deg) translate(0, -1px); }
+  .navigation #menu {
+    position: absolute;
+    width: 300px;
+    margin: -100px 0 0 -50px;
+    padding: 50px;
+    padding-top: 125px;
+    background: #ededed;
+    list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+    /* to stop flickering of text in safari */
+    transform-origin: 0% 0%;
+    transform: translate(-100%, 0);
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1); }
+  .navigation #menu li {
+    padding: 10px 0;
+    font-size: 22px; }
+  .navigation #menuToggle input:checked ~ ul {
+    transform: none; }
 
 .articles-preview {
   max-height: 100vh;
@@ -110,6 +241,11 @@ input {
 .post {
   margin-bottom: 30px;
   border: 1px solid #e6ecf0;
+  border-radius: 5px; }
+
+.nested-post {
+  border: none;
+  margin-bottom: 0;
   border-radius: 5px; }
 
 .post-comment {
@@ -128,12 +264,20 @@ input {
   border-top: 1px solid #e6ecf0; }
   .comment .comment-author {
     font-weight: 600;
-    font-size: 14px; }
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-right: 5px;
+    display: inline-block; }
     .comment .comment-author:hover {
       cursor: pointer; }
   .comment .comment-body {
     font-size: 14px;
     margin-bottom: 0; }
+  .comment .comment-date {
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    color: #999; }
 
 .article-wrapper {
   background-color: white;
@@ -161,19 +305,21 @@ input {
     font-family: 'Georgia', serif;
     font-size: 14px;
     margin-bottom: 0; }
-  .article-wrapper .reaction-container {
-    width: 100%;
-    height: 22px;
-    padding: 10px 0; }
-    .article-wrapper .reaction-container .reaction {
-      width: 33%; }
-      .article-wrapper .reaction-container .reaction:hover {
-        color: #b71c1c;
-        cursor: pointer; }
-    .article-wrapper .reaction-container .like-icon {
-      margin-right: 5px; }
-    .article-wrapper .reaction-container .liked-icon {
-      color: #b71c1c; }
+
+.reaction-container {
+  width: 100%;
+  height: 22px;
+  padding: 10px 0; }
+  .reaction-container .reaction {
+    width: 33%; }
+    .reaction-container .reaction:hover {
+      color: #b71c1c;
+      cursor: pointer; }
+  .reaction-container .like-icon {
+    margin-right: 5px; }
+  .reaction-container .liked-icon {
+    color: #b71c1c;
+    margin-right: 5px; }
 
 .homepage-body {
   height: 100vh;
@@ -199,7 +345,7 @@ input {
   .homepage-body .social-icon {
     width: 30px; }
   .homepage-body .signup-form {
-    margin-top: 50px; }
+    margin-top: 25px; }
     .homepage-body .signup-form .row {
       margin-bottom: 15px; }
     .homepage-body .signup-form #pwd {
@@ -212,7 +358,8 @@ input {
     padding: 50px 60px; }
     @media (min-width: 550px) {
       .homepage-body .left-container {
-        width: 50%; } }
+        width: 50%;
+        min-height: 100vh; } }
   .homepage-body .right-container {
     padding: 50px 60px; }
     @media (min-width: 550px) {
@@ -221,6 +368,10 @@ input {
 
 .news-page .news-topic-bar {
   margin-top: 25px; }
+.news-page .news-topic {
+  display: inline-block; }
+  .news-page .news-topic h5 {
+    margin-right: 40px; }
 .news-page .topic {
   text-align: center;
   font-size: 16px;
@@ -235,5 +386,131 @@ input {
   transition: background .175s ease-out, color .175s ease-in-out; }
 .news-page .article-container {
   margin-top: 30px; }
+
+.profile-page .border {
+  border: 1px solid #e6ecf0; }
+.profile-page .profile-container {
+  width: 80%;
+  margin: 20px auto; }
+.profile-page .profile-photo {
+  width: 100%;
+  margin-bottom: 30px; }
+  .profile-page .profile-photo .img {
+    width: 100%; }
+  .profile-page .profile-photo .placeholder-photo {
+    background-color: #A9A9A9;
+    width: 100%;
+    height: 200px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center; }
+    .profile-page .profile-photo .placeholder-photo .user-icon {
+      align-self: flex-end;
+      color: white; }
+.profile-page .about {
+  margin-bottom: 30px; }
+.profile-page .title-box {
+  height: 30px;
+  background-color: white;
+  padding: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #e6ecf0;
+  font-weight: bold; }
+.profile-page .info {
+  padding: 10px;
+  background-color: white; }
+.profile-page .follower-info {
+  cursor: pointer; }
+  .profile-page .follower-info .text, .profile-page .follower-info .number {
+    display: inline-block; }
+  .profile-page .follower-info .number {
+    float: right;
+    color: #328cc1;
+    font-weight: bold; }
+.profile-page .followers {
+  margin-bottom: 15px; }
+.profile-page .edit-profile {
+  width: 100%;
+  background-color: #328cc1;
+  color: white;
+  border-radius: 5px; }
+.profile-page .write-post {
+  overflow: auto;
+  margin-bottom: 30px; }
+.profile-page .center {
+  text-align: center; }
+
+.modal-header {
+  padding: 20px 80px;
+  text-align: left; }
+
+.user {
+  font-weight: bold;
+  color: #328cc1;
+  cursor: pointer; }
+  .user:hover {
+    text-decoration: underline; }
+
+.settings-page #editFName {
+  margin-bottom: 10px; }
+.settings-page .action {
+  color: #328cc1;
+  font-size: 24px;
+  text-decoration: underline;
+  margin-bottom: 15px;
+  cursor: pointer; }
+
+.article-share, .article-comment {
+  background-color: white;
+  border: 1px solid #e6ecf0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 30px; }
+  .article-share .space, .article-comment .space {
+    margin-right: 5px; }
+  .article-share .name, .article-share .article-title, .article-comment .name, .article-comment .article-title {
+    font-weight: bold;
+    color: #328cc1;
+    cursor: pointer; }
+  .article-share .title, .article-comment .title {
+    padding-left: 5px; }
+  .article-share .comment-text, .article-comment .comment-text {
+    padding-left: 5px;
+    margin-bottom: 10px; }
+  .article-share .date, .article-comment .date {
+    color: #999;
+    font-size: 12px;
+    padding-left: 6px;
+    margin-bottom: 5px; }
+
+.looks-page .looks-feed {
+  padding: 2% 10%; }
+
+.password-container {
+  text-align: center;
+  margin: 10% auto; }
+  .password-container .email {
+    display: block;
+    margin: 10px auto;
+    width: 350px; }
+  .password-container .button {
+    background-color: #328cc1;
+    color: white;
+    margin: 10px auto;
+    width: 350px; }
+
+.search-result-page .results-container {
+  padding-top: 40px; }
+  .search-result-page .results-container h5 {
+    font-weight: bold; }
+.search-result-page .header {
+  font-weight: 600; }
+.search-result-page .results {
+  border: 1px solid #e6ecf0;
+  background-color: white;
+  padding: 10px;
+  margin-bottom: 50px; }
+.search-result-page .title {
+  font-weight: 600; }
 
 /*# sourceMappingURL=index.css.map */
