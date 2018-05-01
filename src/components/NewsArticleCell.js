@@ -40,6 +40,13 @@ class NewsArticleCell extends Component {
     this.setState({ showComments: !showComments });
   }
 
+  componentWillMount() {
+    if (!this.state.sessionID) {
+      const ID = localStorage.getItem("sessionID");
+      this.setState({ sessionID: ID})
+    }
+  }
+
   /**
    * Send POST request to like an article.
    */
@@ -140,7 +147,7 @@ class NewsArticleCell extends Component {
                             viewerHasShared: !shareOption
                           })
           } else if (response.body.status == "Failure") {
-            alert("Failed to Share article.");
+            alert("Failed to unshare article.");
           }
         });
     } else {
@@ -159,7 +166,7 @@ class NewsArticleCell extends Component {
             this.setState({ numShares: shares })
             this.setState({ viewerHasShared: !shareOption})
           } else if (response.body.status == "Failure") {
-            alert("Failed to like article.");
+            alert("Failed to share article.");
           }
         });
     }

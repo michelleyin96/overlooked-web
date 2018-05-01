@@ -22,8 +22,9 @@ class NewsTopicBar extends Component {
           <NewsTopic topic="popular" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="human rights" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="corruption" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
-          <NewsTopic topic="legislation" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
+          <NewsTopic topic="government" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="innovation" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
+          <NewsTopic topic="sports" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
           <NewsTopic topic="universities" activeTopic={this.state.activeTopic} handleClick={this._updateActiveTopic.bind(this)}/>
         </div>
       </div>

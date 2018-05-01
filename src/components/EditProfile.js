@@ -5,16 +5,21 @@ import UserIcon from 'react-icons/lib/fa/user';
 import {
   Link
 } from "react-router-dom";
+import firebase from '../firebase';
 
 class EditProfile extends Component {
 	constructor(props) {
 		super(props);
+    this.state = {
+      profilePic: false,
+    }
     this.fNameChange = this.fNameChange.bind(this);
     this.lNameChange = this.lNameChange.bind(this);
     this.bioChange = this.bioChange.bind(this);
     this.postChanges = this.postChanges.bind(this);
     this.uploadPhoto = this.uploadPhoto.bind(this);
     this.postPhoto = this.postPhoto.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
 	}
 
   /**
@@ -91,6 +96,7 @@ class EditProfile extends Component {
       reader.readAsDataURL(filelist[numFiles - 1]);
     }
     reader.onload = (event) => {
+      this.setState({ "profilePicURL": reader.result, "profilePic": true})
       this.postPhoto(reader.result)
     }
   }
@@ -109,9 +115,9 @@ class EditProfile extends Component {
     const lName = this.state.lName;
     const bio = this.state.bio;
     const email = this.state.email;
-
+    console.log(photo);
     Request
-      .post(putURL)
+      .put(putURL)
       .send({"params" :
               {
                 "sessionID": sessionID, 
@@ -131,6 +137,36 @@ class EditProfile extends Component {
           return;
         }
       })
+  }
+
+
+  /** 
+   * Delete Account
+   */
+
+  deleteAccount(event) {
+    var firebaseID = "";
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user.uid)
+        const URL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?"
+        Request
+          .del(URL)
+          .send({"params" :
+                  {
+                    "firebaseID": user.uid, 
+                  }
+                })
+          .then(response => {
+            if (response.body.status == "Success") {
+              this.props.history.push("/");
+            } else {
+              alert("Failed to delete. " + response.body.status);
+              return;
+            }
+          })
+      }
+    });
   }
 
 
@@ -157,15 +193,20 @@ class EditProfile extends Component {
 
 
   render() {
+    const profilePic = this.state.profilePic ? (
+                     <img src={this.state.profilePicURL} className="img"/>
+                   ) : (
+                     <div className="placeholder-photo">
+                        <UserIcon size={150} className="user-icon"/>
+                      </div>
+                   );
+
     return (
       <div className="profile-container">
         <div className="row">
           <div className="three columns">
             <div className="profile-photo">
-              {/*<img src="/" className="img"/> */}
-              <div className="placeholder-photo">
-                <UserIcon size={150} className="user-icon"/>
-              </div>
+              {profilePic}
               <div className="button edit-profile" id="edit-photo" onClick={(e) => this.upload.click()}>
                 Edit Profile Photo
               </div>
@@ -219,7 +260,7 @@ class EditProfile extends Component {
           <div className="nine columns">
             <div className="edit-account">
               <Link to="/resetpassword" className="action"><h5>Change account password</h5></Link>
-              <div className="action"><h5>Delete account</h5></div>
+              <div className="action" onClick={this.deleteAccount}><h5>Delete account</h5></div>
             </div>
           </div>
         </div>

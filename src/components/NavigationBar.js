@@ -49,7 +49,7 @@ class NavigationBar extends Component {
    * Search
    */
   performSearch(event) {
-    const searchURL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/search?";
+    const searchURL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/search-func?";
     const searchTerms = this.state.searchTerms;
 
     Request
@@ -61,8 +61,10 @@ class NavigationBar extends Component {
             })
       .then(response => {
         if (response.body.status == "Success") {
-          console.log(response.body.body.users)
-          console.log(response.body.body.articles)
+          this.props.history.push({
+            pathname: '/searchresults',
+            state: { users: response.body.body.users, articles: response.body.body.articles }
+          })
         } else {
           return;
         }

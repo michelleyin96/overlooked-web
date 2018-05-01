@@ -5,6 +5,19 @@ import NewsArticleCell from './NewsArticleCell';
 class ShareActivity extends Component {
   constructor(props) {
     super(props)
+     this.viewProfile = this.viewProfile.bind(this);
+  }
+
+  /**
+   * Redirect to profile page.
+   */
+  viewProfile(event) {
+    if (this.props.commentAuthorID) {
+      this.props.history.push({
+        pathname: '/profile',
+        state: { viewerID: this.props.commentAuthorID }
+      })
+    }
   }
 
 	render() {
@@ -17,10 +30,12 @@ class ShareActivity extends Component {
       context = "shared";
     }
 
+    const viewerName = localStorage.getItem('viewerName');
+
     return (
       <div className="article-share">
         <div className="title">
-          <span className="name space">{ this.props.displayName }</span>
+          <span className="name space" onClick={this.props.viewProfile}>{ this.props.displayName }</span>
           <span className="action space">{ context }</span>
           <span className="article-title space">{ this.props.articleInfo.title }</span>
         </div>
@@ -37,7 +52,7 @@ class ShareActivity extends Component {
           shares={this.props.articleInfo.shares}
           articleID={"1"}
           nested={"true"}
-          viewerName={this.props.displayName }
+          viewerName={ viewerName }
           viewerHasLiked={this.props.articleInfo.userHasLiked}
           viewerHasShared={this.props.articleInfo.userHasShared}
         />

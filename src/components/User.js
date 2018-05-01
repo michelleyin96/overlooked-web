@@ -16,12 +16,12 @@ class User extends Component {
   }
 
   viewProfile(event) {
-    this.props.updateProfile(event);
-    
-    this.props.history.push({
-      pathname: '/profile',
-      state: { viewerID: this.state.sessionID }
-    })
+    if (this.props.sessionID) {
+      this.props.history.push({
+        pathname: '/profile',
+        state: { viewerID: this.state.sessionID }
+      })
+    }
   }
 
 	render() {

@@ -11,7 +11,7 @@ class NewsTopic extends Component {
       classes = "topic underline"
     }
     return (
-      <div className="two columns" onClick={(e) => this.props.handleClick(this.props.topic)}>
+      <div className="news-topic" onClick={(e) => this.props.handleClick(this.props.topic)}>
         <h5 className={classes} id={this.props.topic}>{this.props.topic}</h5>
       </div>
     )
