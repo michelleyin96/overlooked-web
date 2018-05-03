@@ -19,8 +19,18 @@ class NavigationBar extends Component {
       searchTerms: "",
     }
     this.logOut = this.logOut.bind(this);
+    this.checkEnter = this.checkEnter.bind(this);
     this.searchChange = this.searchChange.bind(this);
     this.performSearch = this.performSearch.bind(this);
+  }
+
+  /**
+   * Check if enter pressed
+   */
+  checkEnter(event) {
+    if (event.keyCode === 13) {
+      this.performSearch();
+    }
   }
 
   /**
@@ -85,7 +95,8 @@ class NavigationBar extends Component {
               className="search-bar"
               onChange={this.searchChange}
               value={this.state.searchTerms}
-              placeholder="Search..."
+              onKeyUp={this.checkEnter}
+              placeholder={"Search..."}
             />
             <div class="submit-search" onClick={this.performSearch}>
               <SearchIcon size={18}/>

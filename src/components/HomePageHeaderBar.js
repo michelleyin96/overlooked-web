@@ -14,6 +14,16 @@ class HomePageHeaderBar extends Component {
     this.logInUser = this.logInUser.bind(this);
     this.emailChange = this.emailChange.bind(this);
     this.pwdChange = this.pwdChange.bind(this);
+    this.checkEnter = this.checkEnter.bind(this);
+  }
+
+  /**
+   * Check if enter pressed
+   */
+  checkEnter(event) {
+    if (event.keyCode === 13) {
+      this.logInUser();
+    }
   }
 
   /**
@@ -51,7 +61,7 @@ class HomePageHeaderBar extends Component {
             localStorage.setItem("sessionID", response.body.body);
             this.props.history.push("/news");
           } else {
-            alert("Failed to log in." + response.body.status);
+            alert("Failed to log in. " + response.errorMessage);
             return;
           }
         })
@@ -73,6 +83,7 @@ class HomePageHeaderBar extends Component {
                 placeholder="Email"
                 value={this.state.email}
                 onChange={this.emailChange}
+                onKeyUp={this.checkEnter}
               />
   		    		<input
                 id="password"
@@ -82,6 +93,7 @@ class HomePageHeaderBar extends Component {
                 placeholder="Password"
                 value={this.state.pwd}
                 onChange={this.pwdChange}
+                onKeyUp={this.checkEnter}
               />
   		    		<input
                 className="button-primary login-button u-pull-right"
