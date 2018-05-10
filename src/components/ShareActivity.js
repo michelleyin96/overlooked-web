@@ -24,7 +24,7 @@ class ShareActivity extends Component {
     var dateAdded = this.props.articleInfo.dateAdded;
     const date = moment(dateAdded).format('MMM DD, YYYY');
     var context = "";
-    if (this.props.activityType == "Like") {
+    if (this.props.type == "Like") {
       context = "liked";
     } else {
       context = "shared";
