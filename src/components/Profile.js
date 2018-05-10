@@ -227,7 +227,10 @@ class Profile extends Component {
     }
 
     if (this.props.profilePic && !this.state.profilePic) {
-      this.setState({ profilePic: this.props.profilePic })
+      var profilePicURL = this.props.profilePic;
+      if (profilePicURL.length > 2) {
+        this.setState({ profilePic: profilePicURL })
+      }
     }
 
     const profilePic = this.state.profilePic ? (

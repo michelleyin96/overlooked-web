@@ -177,6 +177,7 @@ class EditProfile extends Component {
                           lName: response.body.body.lName,
                           bio: response.body.body.bio,
                           email: response.body.body.email,
+                          profilePicURL: response.body.body.profilePic,
                           retrieved: true
                         });
         } else {
@@ -187,7 +188,7 @@ class EditProfile extends Component {
 
 
   render() {
-    const profilePic = this.state.profilePic ? (
+    const profilePic = this.state.profilePicURL ? (
                      <img src={this.state.profilePicURL} className="img"/>
                    ) : (
                      <div className="placeholder-photo">

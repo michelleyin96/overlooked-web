@@ -67,15 +67,20 @@ class SearchResultsPage extends Component {
 	  	                          />;
 	  	                  });
 
+    var title = "Top Results";                   
   	if (articles.length > 0) {
   		showArticles = true;
   	}
+
+    if (!showUsers && !showArticles) {
+      title = "No Results";
+    }
 
     return (
         <div className="search-result-page">
           <NavigationBar />
           <div className="results-container container">
-          	<h5 className="header">Top Results</h5>
+          	<h5 className="header">{ title }</h5>
           	{ showUsers &&
           		<div className="user-results results">
           			<h6 className="title">Users</h6>

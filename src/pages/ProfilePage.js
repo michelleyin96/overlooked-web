@@ -33,16 +33,23 @@ class ProfilePage extends Component {
         Request
           .get(profileURL)
           .then(response => {
-            this.setState({ displayName: response.body.body.fName + " " + response.body.body.lName,
-                            bio: response.body.body.bio,
-                            numFollowers: response.body.body.numFollowingUser,
-                            numFollowing:response.body.body.numFollowedByUser,
-                            followers: response.body.body.listFollowingUser,
-                            following: response.body.body.listFollowedByUser,
-                            articleActivities: response.body.body.articleActivities,
-                            commentActivities: response.body.body.commentActivities,
-                            dataRetrieved: true
-                          });
+            if (response.errorMessage) {
+              alert("Could not retrieve user information.");
+              return;
+            } 
+            if (response.body.status == "Success") {
+              this.setState({ displayName: response.body.body.fName + " " + response.body.body.lName,
+                              bio: response.body.body.bio,
+                              profilePic: response.body.body.profilePic,
+                              numFollowers: response.body.body.numFollowingUser,
+                              numFollowing:response.body.body.numFollowedByUser,
+                              followers: response.body.body.listFollowingUser,
+                              following: response.body.body.listFollowedByUser,
+                              articleActivities: response.body.body.articleActivities,
+                              commentActivities: response.body.body.commentActivities,
+                              dataRetrieved: true
+                            });
+            }
           });
       }
     }
@@ -55,6 +62,7 @@ class ProfilePage extends Component {
         .then(response => {
           this.setState({ displayName: response.body.body.fName + " " + response.body.body.lName,
                           bio: response.body.body.bio,
+                          profilePic: response.body.body.profilePic,
                           numFollowers: response.body.body.numFollowingUser,
                           numFollowing:response.body.body.numFollowedByUser,
                           followers: response.body.body.listFollowingUser,
@@ -98,6 +106,7 @@ class ProfilePage extends Component {
             sessionID={ this.state.userID }
             myProfile={ myProfile }
             displayName={ this.state.displayName}
+            profilePic= { this.state.profilePic }
             bio={ this.state.bio }
             numFollowers={ this.state.numFollowers }
             numFollowing={ this.state.numFollowing }
