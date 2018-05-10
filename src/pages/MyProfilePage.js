@@ -33,6 +33,7 @@ class MyProfilePage extends Component {
         .then(response => {
           this.setState({ displayName: response.body.body.fName + " " + response.body.body.lName,
                           bio: response.body.body.bio,
+                          profilePic: response.body.body.profilePic,
                           numFollowers: response.body.body.numFollowingUser,
                           numFollowing:response.body.body.numFollowedByUser,
                           followers: response.body.body.listFollowingUser,
@@ -53,6 +54,7 @@ class MyProfilePage extends Component {
           myProfile={ myProfile }
           displayName={ this.state.displayName}
           bio={ this.state.bio }
+          profilePic= { this.state.profilePic }
           numFollowers={ this.state.numFollowers }
           numFollowing={ this.state.numFollowing }
           followers={ this.state.followers }

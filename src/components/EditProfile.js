@@ -3,7 +3,9 @@ import Request from 'superagent';
 import George from '../img/george.jpg';
 import UserIcon from 'react-icons/lib/fa/user';
 import {
-  Link
+  Link,
+  browserHistory,
+  withRouter
 } from "react-router-dom";
 import firebase from '../firebase';
 
@@ -145,27 +147,15 @@ class EditProfile extends Component {
    */
 
   deleteAccount(event) {
-    var firebaseID = "";
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log(user.uid)
-        const URL = "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/users/info?"
-        Request
-          .del(URL)
-          .send({"params" :
-                  {
-                    "firebaseID": user.uid, 
-                  }
-                })
-          .then(response => {
-            if (response.body.status == "Success") {
-              this.props.history.push("/");
-            } else {
-              alert("Failed to delete. " + response.body.status);
-              return;
-            }
-          })
-      }
+      var firebaseID = user.uid;
+      user.delete().then(() => {
+        alert("Successfully deleted.");
+        this.props.history.push("/");
+      }).catch(function(error) {
+        alert(error.message);
+        return;
+      });
     });
   }
 
@@ -182,12 +172,16 @@ class EditProfile extends Component {
     Request
       .get(profileURL)
       .then(response => {
-        this.setState({ fName: response.body.body.fName,
-                        lName: response.body.body.lName,
-                        bio: response.body.body.bio,
-                        email: response.body.body.email,
-                        retrieved: true
-                      });
+        if (response.body.status == "Success") {
+          this.setState({ fName: response.body.body.fName,
+                          lName: response.body.body.lName,
+                          bio: response.body.body.bio,
+                          email: response.body.body.email,
+                          retrieved: true
+                        });
+        } else {
+          alert("Could not retrieve information. Please try again.")
+        }
       });
   }
 
@@ -269,4 +263,4 @@ class EditProfile extends Component {
   }
 }
 
-export default EditProfile
+export default withRouter(EditProfile);

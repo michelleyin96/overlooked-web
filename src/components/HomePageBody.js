@@ -48,7 +48,7 @@ class HomePageBody extends Component {
     }
 
     const articlesURL =
-    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?articleID=1&topic=all&numArticles=%22%22&direction=DESC&sessionID=0"
+    "https://klo9j9w9n8.execute-api.us-west-1.amazonaws.com/test/client/articles?topic=all&numArticles=10&sessionID=0"
 
     Request
       .get(articlesURL)
@@ -202,7 +202,7 @@ class HomePageBody extends Component {
                   }
                 })
           .then(response => {
-            if (response.body.errorMessage) {
+            if (response.errorMessage) {
               alert("Unsuccessful");
             }
             if (response.body.status == "Success") {

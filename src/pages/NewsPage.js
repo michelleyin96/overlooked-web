@@ -49,8 +49,13 @@ class NewsPage extends Component {
       Request
         .get(userURL)
         .then(response => {
-          var name = response.body.body.fName + " " + response.body.body.lName;
-          localStorage.setItem('viewerName', name);
+          if (response.body.status == "Success") {
+            var name = response.body.body.fName + " " + response.body.body.lName;
+            localStorage.setItem('viewerName', name);
+          }
+          if (response.errorMessage) {
+            alert("Could not retrieve user information.")
+          }
         });
   }
 

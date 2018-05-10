@@ -226,8 +226,12 @@ class Profile extends Component {
                       })
     }
 
+    if (this.props.profilePic && !this.state.profilePic) {
+      this.setState({ profilePic: this.props.profilePic })
+    }
+
     const profilePic = this.state.profilePic ? (
-                     <img src={this.state.profilePicURL} className="img"/>
+                     <img src={this.state.profilePic} className="img"/>
                    ) : (
                      <div className="placeholder-photo">
                         <UserIcon size={150} className="user-icon"/>
