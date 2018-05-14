@@ -17,9 +17,10 @@ class User extends Component {
 
   viewProfile(event) {
     if (this.props.sessionID) {
+      console.log("hello " + this.props.sessionID)
       this.props.history.push({
         pathname: '/profile',
-        state: { viewerID: this.state.sessionID }
+        state: { viewerID: this.props.sessionID }
       })
     }
   }

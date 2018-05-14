@@ -22,14 +22,11 @@ class SearchResultsPage extends Component {
 	}
 
   render() {
-  	console.log("results")
-  	console.log(this.state.users)
-  	console.log(this.state.articles)
-
   	const viewerName = localStorage.getItem('viewerName');
   	const sessionID = localStorage.getItem('sessionID');
   	var showUsers = false;
   	var showArticles = false;
+
 
   	var users = [];
   	users = this.state.users ? this.state.users : [];
@@ -44,6 +41,8 @@ class SearchResultsPage extends Component {
   	if (users.length > 0) {
   		showUsers = true;
   	}
+
+    console.log(users)
 
   	var articles = [];
   	articles = this.state.articles ? this.state.articles : [];
