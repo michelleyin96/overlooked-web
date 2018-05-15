@@ -1,9 +1,9 @@
 ## Work flow instructions
 
--Pull repository
--run "npm start" to start development server which will open app at localhost://3000
--After making changes, push to repository
--Then to update AWS, run "npm run build" and copy contents in build folder to aws S3 bucket "overlooked-web"
+- [Pull repository]
+- [run "npm start" to start development server which will open app at localhost://3000]
+- [After making changes, push to repository]
+- [Then to update AWS, run "npm run build" and copy contents in build folder to aws S3 bucket "overlooked-web"]
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
